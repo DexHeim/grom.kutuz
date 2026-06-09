@@ -3,10 +3,19 @@
 
   const activities = window.GROM_ACTIVITIES || [];
   const promotionSteps = window.GROM_PROMOTION_STEPS || [];
-  const storageKey = 'osn-grom-calculator-v3';
+  const storageKey = 'osn-grom-calculator-v4';
 
   const $ = (selector, parent = document) => parent.querySelector(selector);
   const $$ = (selector, parent = document) => Array.from(parent.querySelectorAll(selector));
+
+  const categoryMap = {
+    gmp: 'ГМП', reports: 'Инструктор', exams: 'Инструктор', supply: 'Поставка',
+    raid_participation: 'Налёты', raid_success: 'Налёты', robbery_success: 'Ограбления',
+    flat_robbery: 'Ограбления', kraz_participation: 'КРАЗ', kraz_success: 'КРАЗ',
+    ik7: 'ИК-7', patrol: 'Патруль', training: 'Тренировка', arrest: 'Арест', fine: 'Штраф'
+  };
+
+  const $id = (id) => document.getElementById(id);
 
   function numberFormat(value) {
     return new Intl.NumberFormat('ru-RU').format(value);
@@ -19,7 +28,7 @@
   }
 
   function escapeHtml(value) {
-    return String(value)
+    return String(value ?? '')
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
@@ -27,15 +36,26 @@
       .replace(/'/g, '&#039;');
   }
 
+  function normalize(value) {
+    return String(value ?? '').toLowerCase().trim();
+  }
+
+  function cssEscape(value) {
+    if (window.CSS && typeof window.CSS.escape === 'function') return window.CSS.escape(String(value));
+    return String(value).replace(/[\\"']/g, '\\$&');
+  }
+
   function loadValues() {
-    try {
-      const raw = localStorage.getItem(storageKey);
-      if (!raw) return {};
-      const parsed = JSON.parse(raw);
-      return typeof parsed === 'object' && parsed !== null ? parsed : {};
-    } catch {
-      return {};
+    const keys = ['osn-grom-calculator-v4', 'osn-grom-calculator-v3'];
+    for (const key of keys) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) continue;
+        const parsed = JSON.parse(raw);
+        if (typeof parsed === 'object' && parsed !== null) return parsed;
+      } catch {}
     }
+    return {};
   }
 
   function saveValues(values) {
@@ -85,7 +105,7 @@
   }
 
   function renderPromotionCards() {
-    const container = $('#promotionCards');
+    const container = $id('promotionCards');
     if (!container) return;
 
     container.innerHTML = promotionSteps.map((step, index) => {
@@ -107,50 +127,70 @@
   }
 
   function initCalculator() {
-    const list = $('#activityList');
+    const list = $id('activityList');
     if (!list) return;
 
     const elements = {
       list,
-      tableTotal: $('#tableTotal'),
-      totalPoints: $('#totalPoints'),
-      totalActions: $('#totalActions'),
-      activeRows: $('#activeRows'),
-      promotionStatus: $('#promotionStatus'),
-      progressBar: $('#progressBar'),
-      nextThresholdText: $('#nextThresholdText'),
-      resetBtn: $('#resetBtn'),
-      fillExampleBtn: $('#fillExampleBtn'),
-      copyReportBtn: $('#copyReportBtn'),
-      copyTemplateBtn: $('#copyTemplateBtn'),
-      copyStatus: $('#copyStatus'),
-      reportTemplate: $('#reportTemplate')
+      search: $id('activitySearch'),
+      tableTotal: $id('tableTotal'),
+      totalPoints: $id('totalPoints'),
+      totalActions: $id('totalActions'),
+      activeRows: $id('activeRows'),
+      promotionStatus: $id('promotionStatus'),
+      progressBar: $id('progressBar'),
+      nextThresholdText: $id('nextThresholdText'),
+      filledActivities: $id('filledActivities'),
+      resetBtn: $id('resetBtn'),
+      fillExampleBtn: $id('fillExampleBtn'),
+      copyReportBtn: $id('copyReportBtn'),
+      copyTemplateBtn: $id('copyTemplateBtn'),
+      copyStatus: $id('copyStatus'),
+      reportTemplate: $id('reportTemplate')
     };
 
-    const state = { values: loadValues() };
+    const state = {
+      values: loadValues(),
+      query: ''
+    };
+
+    function activityMatches(activity) {
+      if (!state.query) return true;
+      const haystack = [activity.title, activity.proof, categoryMap[activity.id]].map(normalize).join(' ');
+      return haystack.includes(state.query);
+    }
 
     function getRowsData() {
       return activities.map((activity) => {
         const count = sanitizeCount(state.values[activity.id] ?? 0);
-        return { ...activity, count, total: count * activity.points };
+        return { ...activity, category: categoryMap[activity.id] || 'Активность', count, total: count * activity.points };
       });
     }
 
     function renderActivities() {
-      elements.list.innerHTML = activities.map((activity) => {
+      const visible = activities.filter(activityMatches);
+
+      if (!visible.length) {
+        elements.list.innerHTML = '<div class="empty-state">По такому поиску активностей нет.</div>';
+        return;
+      }
+
+      elements.list.innerHTML = visible.map((activity, index) => {
         const savedValue = sanitizeCount(state.values[activity.id] ?? 0);
+        const category = categoryMap[activity.id] || 'Активность';
         return `
-          <article class="activity-card" data-id="${escapeHtml(activity.id)}">
+          <article class="activity-card activity-card--v3" data-id="${escapeHtml(activity.id)}">
+            <div class="activity-card__num">${String(index + 1).padStart(2, '0')}</div>
             <div class="activity-card__main">
+              <div class="activity-card__meta">
+                <span>${escapeHtml(category)}</span>
+                <strong>${numberFormat(activity.points)} баллов за 1</strong>
+              </div>
               <h3>${escapeHtml(activity.title)}</h3>
-              <p class="activity-card__proof">${escapeHtml(activity.proof)}</p>
+              <p class="activity-card__proof"><b>Док-во:</b> ${escapeHtml(activity.proof)}</p>
             </div>
-            <div class="activity-card__score">
-              <span>баллов за 1</span>
-              <strong>${numberFormat(activity.points)}</strong>
-            </div>
-            <label class="activity-card__input">
-              <span class="mini-label">кол-во</span>
+            <div class="counter" aria-label="Количество активности">
+              <button class="counter__btn" type="button" data-counter="-1" data-id="${escapeHtml(activity.id)}" aria-label="Уменьшить количество">−</button>
               <input
                 type="number"
                 min="0"
@@ -158,10 +198,11 @@
                 step="1"
                 inputmode="numeric"
                 value="${savedValue || ''}"
+                placeholder="0"
                 aria-label="Количество: ${escapeHtml(activity.title)}"
-                data-points="${activity.points}"
                 data-id="${escapeHtml(activity.id)}">
-            </label>
+              <button class="counter__btn" type="button" data-counter="1" data-id="${escapeHtml(activity.id)}" aria-label="Увеличить количество">+</button>
+            </div>
             <div class="activity-card__total">
               <span>итого</span>
               <strong data-row-total="${escapeHtml(activity.id)}">0</strong>
@@ -170,7 +211,7 @@
         `;
       }).join('');
 
-      $$('#activityList input').forEach((input) => {
+      $$('input[data-id]', elements.list).forEach((input) => {
         input.addEventListener('input', handleInput);
         input.addEventListener('blur', () => {
           const value = sanitizeCount(input.value);
@@ -179,16 +220,29 @@
       });
     }
 
+    function setValue(id, value) {
+      const safeValue = sanitizeCount(value);
+      if (safeValue > 0) state.values[id] = safeValue;
+      else delete state.values[id];
+      saveValues(state.values);
+
+      const input = $(`input[data-id="${cssEscape(id)}"]`, elements.list);
+      if (input) input.value = safeValue || '';
+      updateAll();
+    }
+
     function handleInput(event) {
       const input = event.currentTarget;
-      const id = input.dataset.id;
-      const value = sanitizeCount(input.value);
+      setValue(input.dataset.id, input.value);
+    }
 
-      if (value > 0) state.values[id] = value;
-      else delete state.values[id];
-
-      saveValues(state.values);
-      updateAll();
+    function handleCounterClick(event) {
+      const button = event.target.closest('[data-counter]');
+      if (!button) return;
+      const id = button.dataset.id;
+      const delta = Number(button.dataset.counter);
+      const current = sanitizeCount(state.values[id] ?? 0);
+      setValue(id, Math.max(0, current + delta));
     }
 
     function buildReport(rows, totalPoints, promotionInfo) {
@@ -228,6 +282,22 @@
       ].join('\n');
     }
 
+    function renderFilledActivities(rows) {
+      if (!elements.filledActivities) return;
+      const filled = rows.filter((row) => row.count > 0);
+      if (!filled.length) {
+        elements.filledActivities.innerHTML = '<div class="empty-state">Пока ничего не внесено.</div>';
+        return;
+      }
+
+      elements.filledActivities.innerHTML = filled.map((row) => `
+        <div class="selected-activity">
+          <span>${escapeHtml(row.title)}</span>
+          <strong>${row.count} × ${row.points} = ${numberFormat(row.total)}</strong>
+        </div>
+      `).join('');
+    }
+
     function updateAll() {
       const rows = getRowsData();
       const totalPoints = rows.reduce((sum, row) => sum + row.total, 0);
@@ -236,7 +306,7 @@
       const promotionInfo = getPromotionInfo(totalPoints);
 
       rows.forEach((row) => {
-        const totalCell = $(`[data-row-total="${row.id}"]`);
+        const totalCell = $(`[data-row-total="${cssEscape(row.id)}"]`);
         if (totalCell) totalCell.textContent = numberFormat(row.total);
       });
 
@@ -251,6 +321,7 @@
           ? `Следующий порог: ${promotionInfo.next.title} — ${numberFormat(promotionInfo.next.points)} баллов`
           : 'Следующий порог: балльная сетка закрыта';
       }
+      renderFilledActivities(rows);
       if (elements.reportTemplate) elements.reportTemplate.value = buildReport(rows, totalPoints, promotionInfo);
     }
 
@@ -287,7 +358,7 @@
     function resetCalculator() {
       state.values = {};
       saveValues(state.values);
-      $$('#activityList input').forEach((input) => { input.value = ''; });
+      $$('input[data-id]', elements.list).forEach((input) => { input.value = ''; });
       updateAll();
       showCopyStatus('Калькулятор очищен.');
     }
@@ -295,14 +366,19 @@
     function fillExample() {
       state.values = { supply: 2, patrol: 1, gmp: 1, training: 2, arrest: 1, fine: 2 };
       saveValues(state.values);
-      $$('#activityList input').forEach((input) => {
-        const value = state.values[input.dataset.id] ?? 0;
-        input.value = value || '';
-      });
+      renderActivities();
       updateAll();
       showCopyStatus('Пример внесён. Можно менять цифры под свой отчёт.');
     }
 
+    function updateSearch() {
+      state.query = normalize(elements.search?.value);
+      renderActivities();
+      updateAll();
+    }
+
+    elements.list.addEventListener('click', handleCounterClick);
+    if (elements.search) elements.search.addEventListener('input', updateSearch);
     if (elements.resetBtn) elements.resetBtn.addEventListener('click', resetCalculator);
     if (elements.fillExampleBtn) elements.fillExampleBtn.addEventListener('click', fillExample);
     if (elements.copyReportBtn) elements.copyReportBtn.addEventListener('click', () => copyText(elements.reportTemplate.value, 'Отчёт скопирован.'));

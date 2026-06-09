@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
-  <meta name="description" content="Редактор состава ОСН Гром: локальный черновик и экспорт data/roster.json.">
+  <meta name="description" content="Редактор состава ОСН Гром: вход по паролю, локальный черновик, экспорт JSON и опциональная запись в GitHub через токен администратора.">
   <meta name="theme-color" content="#0d2448">
-  <title>Редактор состава · ОСН «Гром»</title>
+  <title>Админка состава · ОСН «Гром»</title>
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -29,24 +29,54 @@
   <main>
     <section class="page-hero section-pad section-pad--tight" aria-labelledby="page-title">
       <div class="reveal">
-        <p class="eyebrow">Редактор состава</p>
-        <h1 id="page-title">Локальная админка без бэкенда</h1>
-        <p class="page-hero__lead">GitHub Pages не даёт серверную базу данных, поэтому этот экран делает черновик состава в браузере и экспортирует готовый <code>roster.json</code>. Потом файл надо заменить в папке <code>data</code> и закоммитить.</p>
+        <p class="eyebrow">Админка состава</p>
+        <h1 id="page-title">Вход, редактор и пуш в репу</h1>
+        <p class="page-hero__lead">Логин и пароль открывают интерфейс. Реальная запись на сайт делается либо скачиванием <code>roster.json</code>, либо через GitHub API с токеном владельца репозитория.</p>
       </div>
       <aside class="glass panel reveal">
-        <h3>Важно</h3>
-        <p class="muted">Это не защищённая админка с логином. Любой может открыть страницу, но чужой человек не сможет изменить сайт без доступа к репозиторию.</p>
+        <h3>Без серверной магии</h3>
+        <p class="muted">Пароль хранится как PBKDF2-хеш. Это нормальная защита от случайных глаз, но не банковский сейф: статический сайт нельзя сделать полноценной закрытой админкой без бэкенда.</p>
       </aside>
     </section>
 
-    <section class="section section-pad section-pad--tight" aria-labelledby="admin-title">
-      <div class="section__head reveal">
-        <p class="eyebrow">Черновик</p>
-        <h2 id="admin-title">Редактирование data/roster.json</h2>
-        <p>Заполни форму, скачай JSON и замени им файл <code>data/roster.json</code> в репозитории. Это тупо, но надёжно и без дыр с токенами в открытом сайте.</p>
+    <section class="section section-pad section-pad--tight admin-auth" id="loginPanel" aria-labelledby="login-title">
+      <div class="auth-shell reveal">
+        <article class="admin-card auth-card">
+          <p class="eyebrow">Доступ</p>
+          <h2 id="login-title">Вход в редактор</h2>
+          <form id="loginForm" class="form-grid auth-form">
+            <label class="field field--full">
+              <span class="mini-label">логин</span>
+              <input id="adminLogin" type="text" autocomplete="username" required placeholder="admin">
+            </label>
+            <label class="field field--full">
+              <span class="mini-label">пароль</span>
+              <input id="adminPassword" type="password" autocomplete="current-password" required placeholder="••••••••••••">
+            </label>
+            <button class="btn btn--primary btn--wide field--full" type="submit">Войти</button>
+          </form>
+          <p class="copy-status" id="loginStatus" aria-live="polite"></p>
+        </article>
+
+        <aside class="note-card auth-note">
+          <h3>Как сменить пароль</h3>
+          <p class="muted">Открой генератор, введи новый пароль и замени объект пользователя в <code>assets/js/admin-auth-config.js</code>.</p>
+          <a class="btn btn--ghost btn--wide" href="tools/hash-password.html" target="_blank" rel="noopener noreferrer">Генератор хеша</a>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section section-pad section-pad--tight" id="adminWorkspace" hidden aria-labelledby="admin-title">
+      <div class="admin-session-bar reveal">
+        <div>
+          <span class="tag">сессия активна</span>
+          <h2 id="admin-title">Редактирование состава</h2>
+          <p class="muted">Вошёл: <strong id="adminUserLabel">—</strong>. Сначала правишь черновик, потом скачиваешь JSON или пушишь его в GitHub.</p>
+        </div>
+        <button class="btn btn--ghost" type="button" id="logoutBtn">Выйти</button>
       </div>
 
-      <div class="admin-grid">
+      <div class="admin-grid admin-grid--editor">
         <article class="admin-card reveal">
           <div class="admin-card__head">
             <div>
@@ -57,22 +87,28 @@
 
           <form id="memberForm" class="form-grid">
             <label class="field field--full">
-              <span class="mini-label">Дата обновления</span>
-              <input id="rosterUpdatedInput" type="date">
+              <span class="mini-label">группа</span>
+              <input id="groupTitle" type="text" list="groupOptions" placeholder="Например: Оперативный состав" required>
+              <datalist id="groupOptions"></datalist>
+            </label>
+            <label class="field field--full">
+              <span class="mini-label">фио / ник</span>
+              <input id="memberName" type="text" placeholder="ФИО или игровой ник" required>
             </label>
             <label class="field">
-              <span class="mini-label">Группа</span>
-              <input id="groupTitle" list="groupSuggestions" value="Оперативный состав" required>
-              <datalist id="groupSuggestions">
-                <option value="Командование"></option>
-                <option value="Инструкторский состав"></option>
-                <option value="Оперативный состав"></option>
-                <option value="Стажёрский состав"></option>
-                <option value="Кадровый резерв"></option>
-              </datalist>
+              <span class="mini-label">звание</span>
+              <input id="memberRank" type="text" placeholder="Ст. лейтенант">
             </label>
             <label class="field">
-              <span class="mini-label">Статус</span>
+              <span class="mini-label">должность</span>
+              <input id="memberPosition" type="text" placeholder="Оперативник">
+            </label>
+            <label class="field">
+              <span class="mini-label">позывной</span>
+              <input id="memberCallsign" type="text" placeholder="Гром-7">
+            </label>
+            <label class="field">
+              <span class="mini-label">статус</span>
               <select id="memberStatus">
                 <option value="active">Активен</option>
                 <option value="trainee">Стажёр</option>
@@ -80,89 +116,110 @@
                 <option value="leave">Отпуск</option>
               </select>
             </label>
-            <label class="field">
-              <span class="mini-label">ФИО / ник</span>
-              <input id="memberName" placeholder="Иванов Иван" required>
-            </label>
-            <label class="field">
-              <span class="mini-label">Позывной</span>
-              <input id="memberCallsign" placeholder="Демон 92-й">
-            </label>
-            <label class="field">
-              <span class="mini-label">Звание</span>
-              <input id="memberRank" placeholder="Лейтенант">
-            </label>
-            <label class="field">
-              <span class="mini-label">Должность</span>
-              <input id="memberPosition" placeholder="Оперативник ОСН" required>
+            <label class="field field--full">
+              <span class="mini-label">примечание</span>
+              <textarea id="memberNote" rows="3" placeholder="Ответственный за экзамены, на испытательном сроке и т.д."></textarea>
             </label>
             <label class="field field--full">
-              <span class="mini-label">Примечание</span>
-              <textarea id="memberNote" rows="4" placeholder="Например: принимает практику задержания"></textarea>
+              <span class="mini-label">дата обновления состава</span>
+              <input id="rosterUpdatedInput" type="date">
             </label>
-            <div class="field field--full">
-              <div class="inline-actions" style="margin-bottom: 0;">
-                <button class="btn btn--primary" type="submit" id="memberSubmitBtn">Добавить сотрудника</button>
-                <button class="btn btn--ghost" type="button" id="cancelEditBtn" hidden>Отменить редактирование</button>
-              </div>
-              <p class="form-help">Черновик сохраняется только в твоём браузере. После скачивания JSON не забудь загрузить его в репу.</p>
-            </div>
+            <button class="btn btn--primary" id="memberSubmitBtn" type="submit">Добавить сотрудника</button>
+            <button class="btn btn--ghost" id="cancelEditBtn" type="button" hidden>Отменить правку</button>
           </form>
+        </article>
+
+        <article class="admin-card reveal">
+          <div class="admin-card__head admin-card__head--stack">
+            <div>
+              <h3>Текущий черновик</h3>
+              <p class="admin-help">Список ниже — то, что попадёт в <code>data/roster.json</code>.</p>
+            </div>
+            <label class="field admin-search">
+              <span class="mini-label">поиск</span>
+              <input id="adminSearch" type="search" placeholder="Найти сотрудника...">
+            </label>
+          </div>
+          <div class="admin-list" id="adminMemberList"></div>
+        </article>
+      </div>
+
+      <div class="admin-grid admin-grid--sync">
+        <article class="admin-card reveal">
+          <div class="admin-card__head">
+            <div>
+              <p class="eyebrow">Синхронизация</p>
+              <h3>Запись в GitHub</h3>
+              <p class="admin-help">Токен вводится руками и не лежит в коде сайта. Без него кнопка пуша не сможет изменить репозиторий.</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <label class="field">
+              <span class="mini-label">owner</span>
+              <input id="ghOwner" type="text" placeholder="github-login">
+            </label>
+            <label class="field">
+              <span class="mini-label">repo</span>
+              <input id="ghRepo" type="text" placeholder="grom-site">
+            </label>
+            <label class="field">
+              <span class="mini-label">branch</span>
+              <input id="ghBranch" type="text" value="main" placeholder="main">
+            </label>
+            <label class="field">
+              <span class="mini-label">path</span>
+              <input id="ghPath" type="text" value="data/roster.json" placeholder="data/roster.json">
+            </label>
+            <label class="field field--full">
+              <span class="mini-label">github token</span>
+              <input id="ghToken" type="password" autocomplete="off" placeholder="fine-grained token с Contents: Read and write">
+            </label>
+            <label class="field field--full">
+              <span class="mini-label">commit message</span>
+              <input id="ghMessage" type="text" value="Update OSN Grom roster">
+            </label>
+            <label class="check-row field--full">
+              <input id="ghRemember" type="checkbox">
+              <span>запомнить token только до закрытия вкладки</span>
+            </label>
+          </div>
+
+          <div class="inline-actions inline-actions--compact">
+            <button class="btn btn--primary" type="button" id="pushGitHubBtn">Запушить roster.json</button>
+            <button class="btn btn--ghost" type="button" id="pullGitHubBtn">Подтянуть из GitHub</button>
+          </div>
+          <div class="warning-box">Не вставляй токен в код и не коммить его в репу. Это будет уже не админка, а приглашение вынести всё нахрен.</div>
         </article>
 
         <article class="admin-card reveal">
           <div class="admin-card__head">
             <div>
-              <h3>Текущий черновик</h3>
-              <p class="admin-help">Можно редачить карточками или сразу JSON-текстом.</p>
-            </div>
-            <div class="inline-actions" style="margin-bottom: 0;">
-              <button class="mini-btn" type="button" id="copyJsonBtn">Скопировать</button>
-              <button class="mini-btn" type="button" id="downloadJsonBtn">Скачать</button>
-            </div>
-          </div>
-
-          <div class="admin-list" id="adminMemberList"></div>
-          <p class="copy-status" id="adminStatus" role="status" aria-live="polite"></p>
-        </article>
-      </div>
-    </section>
-
-    <section class="section section-pad section-pad--tight" aria-labelledby="json-title">
-      <div class="report-grid">
-        <article class="report-card reveal">
-          <div class="report-card__head">
-            <div>
               <p class="eyebrow">JSON</p>
-              <h2 id="json-title">Ручное редактирование</h2>
-            </div>
-            <div class="inline-actions" style="margin-bottom: 0;">
-              <button class="mini-btn" type="button" id="applyJsonBtn">Применить JSON</button>
-              <button class="mini-btn mini-btn--danger" type="button" id="resetDraftBtn">Сбросить черновик</button>
+              <h3>Экспорт состава</h3>
+              <p class="admin-help">Ручной вариант остаётся самым надёжным: скачал файл, заменил в репозитории, сделал commit.</p>
             </div>
           </div>
-          <textarea class="json-editor" id="jsonEditor" spellcheck="false" aria-label="JSON состава"></textarea>
+          <textarea id="jsonEditor" class="json-editor" spellcheck="false" aria-label="JSON состава"></textarea>
+          <div class="inline-actions inline-actions--compact">
+            <button class="btn btn--primary" type="button" id="downloadJsonBtn">Скачать</button>
+            <button class="btn btn--ghost" type="button" id="copyJsonBtn">Копировать</button>
+            <button class="btn btn--ghost" type="button" id="applyJsonBtn">Применить JSON</button>
+            <button class="btn btn--danger" type="button" id="resetDraftBtn">Сбросить черновик</button>
+          </div>
+          <p class="copy-status" id="adminStatus" aria-live="polite"></p>
         </article>
-        <aside class="note-card reveal">
-          <h3>Как опубликовать изменения</h3>
-          <ul>
-            <li>Нажми «Скачать» и получи файл <code>roster.json</code>.</li>
-            <li>В репозитории открой папку <code>data</code>.</li>
-            <li>Замени старый <code>roster.json</code> новым файлом.</li>
-            <li>Сделай commit. После обновления Pages сайт подтянет новый состав.</li>
-            <li>Доступ на редактирование репозитория выдаётся через GitHub Collaborators.</li>
-          </ul>
-        </aside>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <p>ОСН «Гром» · Редактор состава · <span id="year"></span></p>
-    <a href="roster.html">К составу</a>
+    <p>ОСН «Гром» · Админка · <span id="year"></span></p>
+    <a href="#top">Наверх</a>
   </footer>
 
   <script src="assets/js/common.js" defer></script>
+  <script src="assets/js/admin-auth-config.js" defer></script>
   <script src="assets/js/admin.js" defer></script>
 </body>
 </html>

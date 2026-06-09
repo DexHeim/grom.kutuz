@@ -29,84 +29,97 @@
     <section class="page-hero section-pad section-pad--tight" aria-labelledby="page-title">
       <div class="reveal">
         <p class="eyebrow">Калькулятор баллов</p>
-        <h1 id="page-title">Подсчёт без таблицы, которая лезет боком</h1>
-        <p class="page-hero__lead">Каждая активность теперь отдельной карточкой: название, доказательство, баллы за 1, количество и итог. Горизонтального скролла внутри блока больше нет.</p>
+        <h1 id="page-title">Быстрый подсчёт без табличного ада</h1>
+        <p class="page-hero__lead">Выбираешь активности, вводишь количество — сайт считает итог, показывает ближайший порог повышения и собирает текст рапорта.</p>
       </div>
-      <aside class="glass panel reveal">
-        <h3>Данные сохраняются</h3>
-        <p class="muted">Введённые числа остаются в браузере через localStorage. Это удобно для себя, но не является отправкой рапорта.</p>
+      <aside class="glass panel reveal calc-hero-panel">
+        <h3>Локальное сохранение</h3>
+        <p class="muted">Числа остаются только в браузере. Для рапорта используй кнопку копирования и приложи доказательства.</p>
       </aside>
     </section>
 
     <section class="section section-pad section-pad--tight" id="calculator" aria-labelledby="calculator-title">
       <div class="section__head reveal">
         <p class="eyebrow">Начисление</p>
-        <h2 id="calculator-title">За что начисляются баллы</h2>
-        <p>Введите количество активностей. Итог, прогресс до следующего балльного порога и шаблон рапорта обновятся автоматически.</p>
+        <h2 id="calculator-title">Активности ОСН «Гром»</h2>
+        <p>Карточки компактные, итог виден сразу, а доказательства не спрятаны где-то в ебенях.</p>
       </div>
 
-      <div class="calc-layout">
-        <div class="calc-card reveal">
-          <div class="calc-card__top">
-            <div>
-              <h3>Активности ОСН «Гром»</h3>
-              <p>Колонка с доказательствами встроена в карточки, чтобы не приходилось скроллить таблицу по горизонтали.</p>
-            </div>
-            <button class="mini-btn" type="button" id="fillExampleBtn">Пример</button>
+      <div class="calc-shell reveal">
+        <div class="calc-toolbar">
+          <label class="field calc-search">
+            <span class="mini-label">поиск активности</span>
+            <input id="activitySearch" type="search" placeholder="Например: патруль, штраф, КРАЗ...">
+          </label>
+          <div class="calc-toolbar__actions">
+            <button class="mini-btn" type="button" id="fillExampleBtn">Заполнить пример</button>
+            <button class="mini-btn mini-btn--danger" type="button" id="resetBtn">Сбросить</button>
           </div>
-
-          <div class="activity-list" id="activityList" aria-label="Список активностей для подсчёта баллов"></div>
         </div>
 
-        <aside class="summary-card glass reveal" aria-label="Итог калькулятора">
-          <span class="summary-card__label">Общий итог</span>
-          <strong id="totalPoints">0</strong>
-          <p id="promotionStatus">Введите активности, чтобы увидеть статус по повышению.</p>
+        <div class="calc-dashboard" aria-label="Сводка калькулятора">
+          <article class="calc-metric calc-metric--main">
+            <span>Итого баллов</span>
+            <strong id="totalPoints">0</strong>
+          </article>
+          <article class="calc-metric">
+            <span>Всего действий</span>
+            <strong id="totalActions">0</strong>
+          </article>
+          <article class="calc-metric">
+            <span>Активных строк</span>
+            <strong id="activeRows">0</strong>
+          </article>
+        </div>
 
-          <div class="progress" aria-label="Прогресс до следующего порога">
-            <div class="progress__bar" id="progressBar"></div>
-          </div>
-          <small id="nextThresholdText">Следующий порог: 350 баллов</small>
-
-          <div class="summary-card__meta">
-            <div><span id="totalActions">0</span><small>активностей</small></div>
-            <div><span id="activeRows">0</span><small>строк заполнено</small></div>
+        <div class="calc-workspace">
+          <div class="calc-list-wrap">
+            <div class="activity-list" id="activityList" aria-live="polite"></div>
           </div>
 
-          <div class="summary-card__actions">
-            <button class="btn btn--primary btn--wide" type="button" id="copyReportBtn">Скопировать отчёт</button>
-            <button class="btn btn--ghost btn--wide" type="button" id="resetBtn">Сбросить</button>
-          </div>
-          <p class="copy-status" id="copyStatus" role="status" aria-live="polite"></p>
-        </aside>
+          <aside class="summary-card summary-card--clean" aria-labelledby="summary-title">
+            <span class="summary-card__label">Результат</span>
+            <h3 id="summary-title">Статус повышения</h3>
+            <p id="promotionStatus">Введите активности, чтобы увидеть прогресс.</p>
+            <div class="progress" aria-hidden="true"><div class="progress__bar" id="progressBar"></div></div>
+            <small id="nextThresholdText">Следующий порог появится после расчёта</small>
+
+            <div class="selected-activities" id="filledActivities">
+              <div class="empty-state">Пока ничего не внесено.</div>
+            </div>
+
+            <div class="summary-card__actions">
+              <button class="btn btn--primary btn--wide" type="button" id="copyReportBtn">Скопировать рапорт</button>
+              <a class="btn btn--ghost btn--wide" href="promotion.html">Открыть систему повышения</a>
+            </div>
+            <p class="copy-status" id="copyStatus" aria-live="polite"></p>
+          </aside>
+        </div>
       </div>
     </section>
 
-    <section class="section section-pad section-pad--tight" id="report" aria-labelledby="report-title">
-      <div class="section__head reveal">
-        <p class="eyebrow">Рапорт</p>
-        <h2 id="report-title">Шаблон подачи на повышение</h2>
-        <p>Текст ниже обновляется от калькулятора. Его можно сразу скопировать и вставить в нужную тему или канал.</p>
-      </div>
-
+    <section class="section section-pad section-pad--tight" aria-labelledby="report-title">
       <div class="report-grid">
-        <div class="report-card reveal">
+        <article class="report-card reveal">
           <div class="report-card__head">
-            <h3>Текст рапорта</h3>
-            <button class="mini-btn" type="button" id="copyTemplateBtn">Скопировать</button>
+            <div>
+              <p class="eyebrow">Рапорт</p>
+              <h2 id="report-title">Готовый текст</h2>
+            </div>
+            <button class="mini-btn" type="button" id="copyTemplateBtn">Копировать</button>
           </div>
-          <textarea id="reportTemplate" rows="15" spellcheck="false" aria-label="Шаблон рапорта"></textarea>
-        </div>
-        <div class="note-card reveal">
-          <h3>Перед отправкой проверь</h3>
+          <textarea id="reportTemplate" spellcheck="false" aria-label="Шаблон рапорта"></textarea>
+        </article>
+
+        <aside class="note-card reveal">
+          <h3>Что приложить</h3>
           <ul>
-            <li>ФИО, звание, должность и личное дело.</li>
             <li>Скриншоты или ссылки по каждой активности.</li>
-            <li>Дополнительные условия для нужного повышения.</li>
-            <li>Роль в моссетях, позывной, ВБ или практика задержания — если требуются.</li>
-            <li>Нет ли действующих взысканий или вопросов по дисциплине.</li>
+            <li>Личное дело, военный билет и прочие условия — если они нужны для ступени.</li>
+            <li>Ссылку на таблицу можно оставить как запасной вариант.</li>
           </ul>
-        </div>
+          <div class="info-box">Итог по баллам не отменяет дополнительные условия повышения.</div>
+        </aside>
       </div>
     </section>
   </main>
