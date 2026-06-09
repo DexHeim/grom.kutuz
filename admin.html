@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="description" content="Редактор состава ОСН Гром: локальный черновик и экспорт data/roster.json.">
+  <meta name="theme-color" content="#0d2448">
+  <title>Редактор состава · ОСН «Гром»</title>
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="admin">
+  <div class="noise" aria-hidden="true"></div>
+
+  <header class="site-header" id="top">
+    <a class="brand" href="index.html" aria-label="На главную"><span class="brand__mark">Г</span><span class="brand__text">ОСН <strong>Гром</strong></span></a>
+    <nav class="main-nav" aria-label="Основная навигация">
+      <a href="index.html" data-nav="home">Главная</a>
+      <a href="faq.html" data-nav="faq">FAQ</a>
+      <a href="promotion.html" data-nav="promotion">Повышение</a>
+      <a href="calculator.html" data-nav="calculator">Калькулятор</a>
+      <a href="roster.html" data-nav="roster">Состав</a>
+      <a href="memos.html" data-nav="memos">Памятки</a>
+    </nav>
+    <button class="theme-toggle" type="button" id="themeToggle" aria-label="Переключить тему"><span aria-hidden="true">◐</span><span class="theme-toggle__text">Тема</span></button>
+  </header>
+
+  <main>
+    <section class="page-hero section-pad section-pad--tight" aria-labelledby="page-title">
+      <div class="reveal">
+        <p class="eyebrow">Редактор состава</p>
+        <h1 id="page-title">Локальная админка без бэкенда</h1>
+        <p class="page-hero__lead">GitHub Pages не даёт серверную базу данных, поэтому этот экран делает черновик состава в браузере и экспортирует готовый <code>roster.json</code>. Потом файл надо заменить в папке <code>data</code> и закоммитить.</p>
+      </div>
+      <aside class="glass panel reveal">
+        <h3>Важно</h3>
+        <p class="muted">Это не защищённая админка с логином. Любой может открыть страницу, но чужой человек не сможет изменить сайт без доступа к репозиторию.</p>
+      </aside>
+    </section>
+
+    <section class="section section-pad section-pad--tight" aria-labelledby="admin-title">
+      <div class="section__head reveal">
+        <p class="eyebrow">Черновик</p>
+        <h2 id="admin-title">Редактирование data/roster.json</h2>
+        <p>Заполни форму, скачай JSON и замени им файл <code>data/roster.json</code> в репозитории. Это тупо, но надёжно и без дыр с токенами в открытом сайте.</p>
+      </div>
+
+      <div class="admin-grid">
+        <article class="admin-card reveal">
+          <div class="admin-card__head">
+            <div>
+              <h3>Добавить или изменить сотрудника</h3>
+              <p class="admin-help">Группа создаётся автоматически, если её ещё нет.</p>
+            </div>
+          </div>
+
+          <form id="memberForm" class="form-grid">
+            <label class="field field--full">
+              <span class="mini-label">Дата обновления</span>
+              <input id="rosterUpdatedInput" type="date">
+            </label>
+            <label class="field">
+              <span class="mini-label">Группа</span>
+              <input id="groupTitle" list="groupSuggestions" value="Оперативный состав" required>
+              <datalist id="groupSuggestions">
+                <option value="Командование"></option>
+                <option value="Инструкторский состав"></option>
+                <option value="Оперативный состав"></option>
+                <option value="Стажёрский состав"></option>
+                <option value="Кадровый резерв"></option>
+              </datalist>
+            </label>
+            <label class="field">
+              <span class="mini-label">Статус</span>
+              <select id="memberStatus">
+                <option value="active">Активен</option>
+                <option value="trainee">Стажёр</option>
+                <option value="reserve">Резерв</option>
+                <option value="leave">Отпуск</option>
+              </select>
+            </label>
+            <label class="field">
+              <span class="mini-label">ФИО / ник</span>
+              <input id="memberName" placeholder="Иванов Иван" required>
+            </label>
+            <label class="field">
+              <span class="mini-label">Позывной</span>
+              <input id="memberCallsign" placeholder="Демон 92-й">
+            </label>
+            <label class="field">
+              <span class="mini-label">Звание</span>
+              <input id="memberRank" placeholder="Лейтенант">
+            </label>
+            <label class="field">
+              <span class="mini-label">Должность</span>
+              <input id="memberPosition" placeholder="Оперативник ОСН" required>
+            </label>
+            <label class="field field--full">
+              <span class="mini-label">Примечание</span>
+              <textarea id="memberNote" rows="4" placeholder="Например: принимает практику задержания"></textarea>
+            </label>
+            <div class="field field--full">
+              <div class="inline-actions" style="margin-bottom: 0;">
+                <button class="btn btn--primary" type="submit" id="memberSubmitBtn">Добавить сотрудника</button>
+                <button class="btn btn--ghost" type="button" id="cancelEditBtn" hidden>Отменить редактирование</button>
+              </div>
+              <p class="form-help">Черновик сохраняется только в твоём браузере. После скачивания JSON не забудь загрузить его в репу.</p>
+            </div>
+          </form>
+        </article>
+
+        <article class="admin-card reveal">
+          <div class="admin-card__head">
+            <div>
+              <h3>Текущий черновик</h3>
+              <p class="admin-help">Можно редачить карточками или сразу JSON-текстом.</p>
+            </div>
+            <div class="inline-actions" style="margin-bottom: 0;">
+              <button class="mini-btn" type="button" id="copyJsonBtn">Скопировать</button>
+              <button class="mini-btn" type="button" id="downloadJsonBtn">Скачать</button>
+            </div>
+          </div>
+
+          <div class="admin-list" id="adminMemberList"></div>
+          <p class="copy-status" id="adminStatus" role="status" aria-live="polite"></p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section-pad section-pad--tight" aria-labelledby="json-title">
+      <div class="report-grid">
+        <article class="report-card reveal">
+          <div class="report-card__head">
+            <div>
+              <p class="eyebrow">JSON</p>
+              <h2 id="json-title">Ручное редактирование</h2>
+            </div>
+            <div class="inline-actions" style="margin-bottom: 0;">
+              <button class="mini-btn" type="button" id="applyJsonBtn">Применить JSON</button>
+              <button class="mini-btn mini-btn--danger" type="button" id="resetDraftBtn">Сбросить черновик</button>
+            </div>
+          </div>
+          <textarea class="json-editor" id="jsonEditor" spellcheck="false" aria-label="JSON состава"></textarea>
+        </article>
+        <aside class="note-card reveal">
+          <h3>Как опубликовать изменения</h3>
+          <ul>
+            <li>Нажми «Скачать» и получи файл <code>roster.json</code>.</li>
+            <li>В репозитории открой папку <code>data</code>.</li>
+            <li>Замени старый <code>roster.json</code> новым файлом.</li>
+            <li>Сделай commit. После обновления Pages сайт подтянет новый состав.</li>
+            <li>Доступ на редактирование репозитория выдаётся через GitHub Collaborators.</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>ОСН «Гром» · Редактор состава · <span id="year"></span></p>
+    <a href="roster.html">К составу</a>
+  </footer>
+
+  <script src="assets/js/common.js" defer></script>
+  <script src="assets/js/admin.js" defer></script>
+</body>
+</html>

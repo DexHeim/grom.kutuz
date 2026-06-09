@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Состав ОСН Гром: командование, инструкторы, оперативники, стажёры и кадровый резерв.">
+  <meta name="theme-color" content="#0d2448">
+  <title>Состав · ОСН «Гром»</title>
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="roster">
+  <div class="noise" aria-hidden="true"></div>
+
+  <header class="site-header" id="top">
+    <a class="brand" href="index.html" aria-label="На главную"><span class="brand__mark">Г</span><span class="brand__text">ОСН <strong>Гром</strong></span></a>
+    <nav class="main-nav" aria-label="Основная навигация">
+      <a href="index.html" data-nav="home">Главная</a>
+      <a href="faq.html" data-nav="faq">FAQ</a>
+      <a href="promotion.html" data-nav="promotion">Повышение</a>
+      <a href="calculator.html" data-nav="calculator">Калькулятор</a>
+      <a href="roster.html" data-nav="roster">Состав</a>
+      <a href="memos.html" data-nav="memos">Памятки</a>
+    </nav>
+    <button class="theme-toggle" type="button" id="themeToggle" aria-label="Переключить тему"><span aria-hidden="true">◐</span><span class="theme-toggle__text">Тема</span></button>
+  </header>
+
+  <main>
+    <section class="page-hero section-pad section-pad--tight" aria-labelledby="page-title">
+      <div class="reveal">
+        <p class="eyebrow">Состав ОСН</p>
+        <h1 id="page-title">Публичный список сотрудников</h1>
+        <p class="page-hero__lead">Страница берёт данные из файла <code>data/roster.json</code>. Меняешь JSON — сайт автоматически показывает новый состав после деплоя.</p>
+        <div class="inline-actions">
+          <a class="btn btn--primary" href="admin.html">Открыть редактор</a>
+          <a class="btn btn--ghost" href="data/roster.json" target="_blank" rel="noopener noreferrer">Открыть JSON</a>
+        </div>
+      </div>
+      <aside class="glass panel reveal">
+        <h3>Сводка</h3>
+        <div class="stat-strip">
+          <div class="stat-card"><strong id="rosterTotal">0</strong><span>сотрудников</span></div>
+          <div class="stat-card"><strong id="rosterUpdated">—</strong><span>обновлено</span></div>
+          <div class="stat-card"><strong>JSON</strong><span>источник данных</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section section-pad section-pad--tight" aria-labelledby="roster-title">
+      <div class="roster-head reveal">
+        <div class="section__head" style="margin-bottom: 0;">
+          <p class="eyebrow">Поиск и фильтр</p>
+          <h2 id="roster-title">Актуальный состав</h2>
+        </div>
+        <div class="roster-toolbar" aria-label="Фильтры состава">
+          <label class="field">
+            <span class="mini-label">поиск</span>
+            <input id="rosterSearch" type="search" placeholder="ФИО, позывной, должность...">
+          </label>
+          <label class="field">
+            <span class="mini-label">статус</span>
+            <select id="rosterStatus">
+              <option value="all">Все</option>
+              <option value="active">Активен</option>
+              <option value="trainee">Стажёр</option>
+              <option value="reserve">Резерв</option>
+              <option value="leave">Отпуск</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="roster-grid" id="rosterRoot">
+        <div class="empty-state">Загрузка состава...</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>ОСН «Гром» · Состав · <span id="year"></span></p>
+    <a href="#top">Наверх</a>
+  </footer>
+
+  <script src="assets/js/common.js" defer></script>
+  <script src="assets/js/roster.js" defer></script>
+</body>
+</html>

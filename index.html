@@ -3,62 +3,55 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="ОСН Гром — RMRP Кутузовский: FAQ, правила, ссылки, памятки, система повышения и калькулятор баллов.">
+  <meta name="description" content="ОСН Гром — RMRP Кутузовский: FAQ, правила, состав, памятки, система повышения и калькулятор баллов.">
   <meta name="theme-color" content="#0d2448">
   <title>ОСН «Гром» — RMRP Кутузовский</title>
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body>
+<body data-page="home">
   <div class="noise" aria-hidden="true"></div>
 
   <header class="site-header" id="top">
-    <a class="brand" href="#top" aria-label="К началу страницы">
+    <a class="brand" href="index.html" aria-label="На главную">
       <span class="brand__mark">Г</span>
       <span class="brand__text">ОСН <strong>Гром</strong></span>
     </a>
-
     <nav class="main-nav" aria-label="Основная навигация">
-      <a href="#faq">FAQ</a>
-      <a href="#rules">Правила</a>
-      <a href="#links">Ссылки</a>
-      <a href="#memos">Памятки</a>
-      <a href="#promotion">Повышение</a>
-      <a href="#calculator">Калькулятор</a>
-      <a href="#report">Рапорт</a>
+      <a href="index.html" data-nav="home">Главная</a>
+      <a href="faq.html" data-nav="faq">FAQ</a>
+      <a href="promotion.html" data-nav="promotion">Повышение</a>
+      <a href="calculator.html" data-nav="calculator">Калькулятор</a>
+      <a href="roster.html" data-nav="roster">Состав</a>
+      <a href="memos.html" data-nav="memos">Памятки</a>
     </nav>
-
-    <button class="theme-toggle" type="button" id="themeToggle" aria-label="Переключить тему">
-      <span aria-hidden="true">◐</span>
-      <span class="theme-toggle__text">Тема</span>
-    </button>
+    <div class="header-actions">
+      <button class="theme-toggle" type="button" id="themeToggle" aria-label="Переключить тему"><span aria-hidden="true">◐</span><span class="theme-toggle__text">Тема</span></button>
+    </div>
   </header>
 
   <main>
     <section class="hero section-pad" aria-labelledby="hero-title">
       <div class="hero__content reveal">
         <p class="eyebrow">RMRP · сервер №5 «Кутузовский» · УВД по ЦАО</p>
-        <h1 id="hero-title">ОСН «Гром»: FAQ, законка и баллы в одном месте</h1>
-        <p class="hero__lead">
-          Статичный сайт для GitHub Pages: внутренние правила отряда, должностная иерархия, быстрые ссылки, памятки, система повышения и калькулятор баллов под рапорт.
-        </p>
+        <h1 id="hero-title">ОСН «Гром»: вся база отряда без Discord-археологии</h1>
+        <p class="hero__lead">Отдельные страницы под FAQ, законку, повышение, калькулятор баллов, состав и памятки. Всё статичное, легко грузится на GitHub Pages и редактируется через обычные файлы.</p>
         <div class="hero__actions">
-          <a class="btn btn--primary" href="#calculator">Открыть калькулятор</a>
-          <a class="btn btn--ghost" href="#promotion">Система повышения</a>
+          <a class="btn btn--primary" href="calculator.html">Открыть калькулятор</a>
+          <a class="btn btn--ghost" href="promotion.html">Система повышения</a>
+          <a class="btn btn--ghost" href="roster.html">Состав</a>
         </div>
         <dl class="hero__stats" aria-label="Краткие показатели сайта">
+          <div><dt>6</dt><dd>разделов сайта</dd></div>
           <div><dt>15</dt><dd>типов активности</dd></div>
           <div><dt>8</dt><dd>ступеней повышения</dd></div>
-          <div><dt>2</dt><dd>визуальные памятки</dd></div>
         </dl>
       </div>
 
       <aside class="hero-card glass reveal" aria-label="Краткая карточка отряда">
         <div class="hero-card__badge">ОСН</div>
         <h2>Отряд специального назначения «Гром»</h2>
-        <p>
-          Силовое подразделение УВД: спецоперации, отработка сигналов, задержания, налёты, ограбления, тренировки и взаимодействие с другими госструктурами.
-        </p>
+        <p>Силовое подразделение УВД: спецоперации, отработка сигналов, задержания, налёты, ограбления, тренировки и взаимодействие с другими госструктурами.</p>
         <div class="status-grid">
           <span>Дисциплина</span>
           <span>Спецсвязь</span>
@@ -68,261 +61,41 @@
       </aside>
     </section>
 
-    <section class="section section-pad" id="faq" aria-labelledby="faq-title">
+    <section class="section section-pad section-pad--tight" aria-labelledby="sections-title">
       <div class="section__head reveal">
-        <p class="eyebrow">FAQ ОСН</p>
-        <h2 id="faq-title">Основная информация</h2>
-        <p>
-          Сайт собран как удобный стартовый экран для состава: куда смотреть, что учить, за что дают баллы и как не словить кадровый резерв из-за тупой ошибки.
-        </p>
+        <p class="eyebrow">Разделы</p>
+        <h2 id="sections-title">Структура сайта</h2>
+        <p>Не надо пихать всё в одну простыню. Главная остаётся витриной, а рабочие штуки вынесены в нормальные отдельные страницы.</p>
       </div>
-
-      <div class="cards cards--four">
-        <article class="card reveal">
-          <span class="card__icon">01</span>
-          <h3>Спецоперации</h3>
-          <p>ГМП, похищения, теракты, отбития, налёты и иные задачи повышенной сложности.</p>
-        </article>
-        <article class="card reveal">
-          <span class="card__icon">02</span>
-          <h3>Патрули и поставки</h3>
-          <p>Патрули по городу, гос.поставки и иная регулярная активность, которая подтверждается скриншотами.</p>
-        </article>
-        <article class="card reveal">
-          <span class="card__icon">03</span>
-          <h3>Подготовка состава</h3>
-          <p>Инструкторы принимают экзамены, практику задержания, помогают стажёрам и проверяют квалификацию.</p>
-        </article>
-        <article class="card reveal">
-          <span class="card__icon">04</span>
-          <h3>Рапорты</h3>
-          <p>Баллы считаются в калькуляторе, отчёт копируется одной кнопкой, доказательства прикладываются отдельно.</p>
-        </article>
+      <div class="quick-grid">
+        <a class="link-card reveal" href="faq.html"><span>FAQ</span><strong>Правила, иерархия и ссылки</strong><small>Внутренний порядок, должности, форум, законка, гайды.</small></a>
+        <a class="link-card reveal" href="promotion.html"><span>Повышение</span><strong>Пороговая сетка</strong><small>Баллы, патрули, поставки, практика, аресты и документы.</small></a>
+        <a class="link-card reveal" href="calculator.html"><span>Баллы</span><strong>Калькулятор без горизонтального скролла</strong><small>Карточки активностей, итог, прогресс и шаблон рапорта.</small></a>
+        <a class="link-card reveal" href="roster.html"><span>Состав</span><strong>Публичный список сотрудников</strong><small>Данные берутся из data/roster.json, редактируются через JSON или редактор.</small></a>
+        <a class="link-card reveal" href="memos.html"><span>Памятки</span><strong>Карта и задержание</strong><small>Карта налётов/ограблений и памятка по порядку задержания.</small></a>
+        <a class="link-card reveal" href="admin.html"><span>Редактор</span><strong>Черновик состава</strong><small>Добавить/удалить сотрудников и скачать готовый roster.json.</small></a>
       </div>
     </section>
 
-    <section class="section section-pad" id="rules" aria-labelledby="rules-title">
+    <section class="section section-pad section-pad--tight" aria-labelledby="workflow-title">
       <div class="section__head reveal">
-        <p class="eyebrow">Внутренний порядок</p>
-        <h2 id="rules-title">Правила и иерархия</h2>
-        <p>Ниже — базовый текст из FAQ ОСН «Гром»: обязательные правила и должности внутри отряда.</p>
+        <p class="eyebrow">Как пользоваться</p>
+        <h2 id="workflow-title">Мини-процесс для состава</h2>
       </div>
-
-      <div class="split-layout">
-        <article class="panel reveal">
-          <h3>Внутренние правила ОСН «Гром»</h3>
-          <ol class="clean-list numbered-list">
-            <li>Заступил на службу — зайди в спецсвязь.</li>
-            <li>Приказы старшего состава ОСН обязательны к исполнению.</li>
-            <li>При отсутствии старшего состава руководство берёт инструкторский состав.</li>
-            <li>Стажёрский состав, независимо от звания, подчиняется оперативному составу.</li>
-            <li>На отработке сигналов позиции, высадка и вход в зону или здание выполняются по команде старшего сотрудника группы.</li>
-            <li>После команды старшего запрещены обсуждение приказа, промедление и самовольство.</li>
-            <li>Нарушение устава УВД запрещено.</li>
-            <li>Нарушение законодательной базы строго запрещено.</li>
-          </ol>
-          <div class="warning-box">
-            За нарушения сотрудник может быть переведён в кадровый резерв. За грубые нарушения — без возможности обратного перевода в ОСН «Гром».
-          </div>
-        </article>
-
-        <article class="panel reveal">
-          <h3>Должностная иерархия</h3>
-          <div class="hierarchy-list">
-            <div><strong>Командир ОСН</strong><span>Главный по управлению деятельностью и дисциплинарным вопросам.</span></div>
-            <div><strong>Заместитель командира</strong><span>Замещает руководителя и принимает деятельность на себя при его отсутствии.</span></div>
-            <div><strong>Командир инструкторов</strong><span>Отвечает за подготовку и квалификацию сотрудников.</span></div>
-            <div><strong>Инструктор</strong><span>Обучает, принимает экзамены и проверяет компетентность.</span></div>
-            <div><strong>Старший оперативник</strong><span>Руководит планом операции, когда руководства ОСН нет на месте.</span></div>
-            <div><strong>Оперативник</strong><span>Исполняет распоряжения в ходе операций.</span></div>
-            <div><strong>Стажёр</strong><span>Изучает работу ОСН, сдаёт квалификационные экзамены и участвует в операциях при необходимости.</span></div>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="section section-pad" id="links" aria-labelledby="links-title">
-      <div class="section__head reveal">
-        <p class="eyebrow">Форум, законка, гайды</p>
-        <h2 id="links-title">Быстрые ссылки</h2>
-        <p>Форумные ссылки, полезные документы, Discord-каналы и материалы для стажёров. Всё открывается в новой вкладке.</p>
-      </div>
-
-      <div class="link-grid">
-        <a class="link-card reveal" href="https://forum.rmrp.ru/forums/server-5/" target="_blank" rel="noopener noreferrer"><span>Сервер</span><strong>Сервер №5 «Кутузовский»</strong><small>Главный раздел сервера</small></a>
-        <a class="link-card reveal" href="https://forum.rmrp.ru/forums/oficialnyj-portal-gos-struktur.511/" target="_blank" rel="noopener noreferrer"><span>Гос</span><strong>Портал госструктур</strong><small>Форумный раздел госорганизаций</small></a>
-        <a class="link-card reveal" href="https://forum.rmrp.ru/forums/upravlenie-vnutrennix-del-po-cao-policija.531/" target="_blank" rel="noopener noreferrer"><span>УВД</span><strong>УВД по ЦАО</strong><small>Раздел полиции</small></a>
-        <a class="link-card reveal" href="https://forum.rmrp.ru/threads/uvd-po-cao-informacija-ob-organizacii-i-ee-otdelax.228295/" target="_blank" rel="noopener noreferrer"><span>Инфо</span><strong>Организация и отделы</strong><small>Описание отделов УВД</small></a>
-        <a class="link-card reveal" href="https://forum.rmrp.ru/threads/uvd-kanceljarija.176482/" target="_blank" rel="noopener noreferrer"><span>Канцелярия</span><strong>УВД · канцелярия</strong><small>Заявления и обращения</small></a>
-        <a class="link-card reveal" href="https://forum.rmrp.ru/threads/upravlenie-vnutrennix-del-vnutrennij-ustav-organizacii.178885/" target="_blank" rel="noopener noreferrer"><span>Устав</span><strong>Внутренний устав УВД</strong><small>Основной внутренний документ</small></a>
-        <a class="link-card reveal" href="https://forum.rmrp.ru/forums/zakonodatelnaja-vlast.519/" target="_blank" rel="noopener noreferrer"><span>Законка</span><strong>Законодательная власть</strong><small>Раздел с законодательными темами</small></a>
-        <a class="link-card reveal" href="https://forum.rmrp.ru/threads/zakonodatelnoe-sobranie-oficialnoe-opublikovanie.176411/" target="_blank" rel="noopener noreferrer"><span>Публикации</span><strong>Официальное опубликование</strong><small>Постановления и публикации</small></a>
-        <a class="link-card reveal" href="https://forum.rmrp.ru/forums/obschie-pravila-proekta.308/" target="_blank" rel="noopener noreferrer"><span>Правила</span><strong>Общие правила проекта</strong><small>База для любого сотрудника</small></a>
-        <a class="link-card reveal" href="https://forum.rmrp.ru/forums/pravila-gosudarstvennyx-organizacij.310/" target="_blank" rel="noopener noreferrer"><span>Гос</span><strong>Правила госорганизаций</strong><small>Отдельные правила для госки</small></a>
-        <a class="link-card reveal" href="https://docs.google.com/document/d/1x31XL4vYkFiCjhF8DSeRmN09f1IGxYYYoBGHONJ3rbc/edit?tab=t.0" target="_blank" rel="noopener noreferrer"><span>Гайд</span><strong>Полезные бинды</strong><small>Документ из FAQ</small></a>
-        <a class="link-card reveal" href="https://docs.google.com/document/d/1YcbHNGRJb8wwlZr4e8ibdaLKbB0k2Idejl-RPVOhh4I/edit?tab=t.0" target="_blank" rel="noopener noreferrer"><span>Файты</span><strong>Фишки в файтах</strong><small>Документ из FAQ</small></a>
-        <a class="link-card reveal" href="https://docs.google.com/document/d/1UEMqrTwDaEuA3knNLKJPqgd16IpWfe2eyBakgK-RMYM/edit?tab=t.0" target="_blank" rel="noopener noreferrer"><span>ПК</span><strong>Оптимизация ПК</strong><small>Документ из FAQ</small></a>
-        <a class="link-card reveal" href="https://youtu.be/xtBuWWfqmdA?si=IxQL5aAaKD0K0ABA" target="_blank" rel="noopener noreferrer"><span>YouTube</span><strong>Гайд для новичков в госке</strong><small>Как и что делать при задержании</small></a>
-        <a class="link-card reveal" href="https://docs.google.com/spreadsheets/d/1l12173ZkFNE4hSjAzFpFk9tBf_FzZBXusxKWo5rXtkU/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer"><span>Таблица</span><strong>Google Sheets калькулятор</strong><small>Оригинальная таблица для подсчёта баллов</small></a>
-        <a class="link-card reveal" href="https://discord.com/channels/1465392165453828138/1495112904511459458" target="_blank" rel="noopener noreferrer"><span>Discord</span><strong>Практика задержания</strong><small>Канал для сдачи практики</small></a>
-        <a class="link-card reveal" href="https://discord.com/channels/1465392165453828138/1473805325374197860" target="_blank" rel="noopener noreferrer"><span>Discord</span><strong>Военный билет</strong><small>Канал для прикрепления ВБ</small></a>
-      </div>
-    </section>
-
-    <section class="section section-pad" id="memos" aria-labelledby="memos-title">
-      <div class="section__head reveal">
-        <p class="eyebrow">Памятки</p>
-        <h2 id="memos-title">Карта и порядок задержания</h2>
-        <p>Карта налётов и ограблений обязательна к изучению для стажёров: её можно использовать на экзамене на повышение по должности.</p>
-      </div>
-
-      <div class="memo-grid">
-        <figure class="memo-card reveal">
-          <a href="assets/img/raid-map.png" target="_blank" rel="noopener noreferrer">
-            <img src="assets/img/raid-map.png" alt="Карта налётов и ограблений ОСН Гром">
-          </a>
-          <figcaption>Карта налётов и ограблений ОСН «Гром»</figcaption>
-        </figure>
-        <figure class="memo-card reveal">
-          <a href="assets/img/arrest-memo.png" target="_blank" rel="noopener noreferrer">
-            <img src="assets/img/arrest-memo.png" alt="Памятка по основаниям и порядку задержания">
-          </a>
-          <figcaption>Памятка по ПК: основания, права задержанного и порядок задержания</figcaption>
-        </figure>
-      </div>
-    </section>
-
-    <section class="section section-pad" id="promotion" aria-labelledby="promotion-title">
-      <div class="section__head reveal">
-        <p class="eyebrow">Система повышения</p>
-        <h2 id="promotion-title">Что нужно для следующего звания</h2>
-        <p>Баллы — не единственное требование. По каждой ступени также нужны патрули, поставки, практика, аресты, штрафы или документы.</p>
-      </div>
-
-      <div class="process reveal" aria-label="Порядок подачи на повышение">
-        <div class="process__item"><span>1</span><h3>Набрать баллы</h3><p>Считаются только подтверждённые активности из таблицы.</p></div>
-        <div class="process__item"><span>2</span><h3>Закрыть условия</h3><p>Патрули, поставки, практика задержания, аресты, штрафы и документы.</p></div>
-        <div class="process__item"><span>3</span><h3>Подать рапорт</h3><p>Приложить личное дело, доказательства и итог из калькулятора.</p></div>
-        <div class="process__item"><span>4</span><h3>Дождаться решения</h3><p>Повышение происходит по решению руководства подразделения.</p></div>
-      </div>
-
-      <div class="table-card reveal">
-        <div class="table-card__head">
-          <h3>Пороговая сетка ОСН «Гром»</h3>
-          <p>Сгенерирована из текста системы повышения.</p>
-        </div>
-        <div class="responsive-table">
-          <table class="rank-table">
-            <thead>
-              <tr>
-                <th>Повышение</th>
-                <th>Баллы</th>
-                <th>Обязательные условия</th>
-              </tr>
-            </thead>
-            <tbody id="promotionTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-pad" id="calculator" aria-labelledby="calculator-title">
-      <div class="section__head reveal">
-        <p class="eyebrow">Калькулятор баллов</p>
-        <h2 id="calculator-title">Подсчёт активности</h2>
-        <p>Введите количество активностей. Итог, прогресс до следующего балльного порога и шаблон рапорта обновятся автоматически.</p>
-      </div>
-
-      <div class="calc-layout">
-        <div class="calc-card reveal">
-          <div class="calc-card__top">
-            <div>
-              <h3>За что начисляются баллы</h3>
-              <p>Колонка «доказательство» сразу показывает, какой скрин или ссылку прикладывать.</p>
-            </div>
-            <button class="mini-btn" type="button" id="fillExampleBtn">Пример</button>
-          </div>
-
-          <div class="responsive-table">
-            <table class="points-table">
-              <thead>
-                <tr>
-                  <th>Активность</th>
-                  <th>Доказательство</th>
-                  <th>Баллов за 1</th>
-                  <th>Кол-во</th>
-                  <th>Итого</th>
-                </tr>
-              </thead>
-              <tbody id="activitiesBody"></tbody>
-              <tfoot>
-                <tr>
-                  <th colspan="4">Итого баллов</th>
-                  <th id="tableTotal">0</th>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
-        </div>
-
-        <aside class="summary-card glass reveal" aria-label="Итог калькулятора">
-          <span class="summary-card__label">Общий итог</span>
-          <strong id="totalPoints">0</strong>
-          <p id="promotionStatus">Введите активности, чтобы увидеть статус по повышению.</p>
-
-          <div class="progress" aria-label="Прогресс до следующего порога">
-            <div class="progress__bar" id="progressBar"></div>
-          </div>
-          <small id="nextThresholdText">Следующий порог: 350 баллов</small>
-
-          <div class="summary-card__meta">
-            <div><span id="totalActions">0</span><small>активностей</small></div>
-            <div><span id="activeRows">0</span><small>строк заполнено</small></div>
-          </div>
-
-          <div class="summary-card__actions">
-            <button class="btn btn--primary btn--wide" type="button" id="copyReportBtn">Скопировать отчёт</button>
-            <button class="btn btn--ghost btn--wide" type="button" id="resetBtn">Сбросить</button>
-          </div>
-          <p class="copy-status" id="copyStatus" role="status" aria-live="polite"></p>
-        </aside>
-      </div>
-    </section>
-
-    <section class="section section-pad" id="report" aria-labelledby="report-title">
-      <div class="section__head reveal">
-        <p class="eyebrow">Рапорт</p>
-        <h2 id="report-title">Шаблон подачи на повышение</h2>
-        <p>Текст ниже обновляется от калькулятора. Его можно сразу скопировать и вставить в нужную тему или канал.</p>
-      </div>
-
-      <div class="report-grid">
-        <div class="report-card reveal">
-          <div class="report-card__head">
-            <h3>Текст рапорта</h3>
-            <button class="mini-btn" type="button" id="copyTemplateBtn">Скопировать</button>
-          </div>
-          <textarea id="reportTemplate" rows="15" spellcheck="false" aria-label="Шаблон рапорта"></textarea>
-        </div>
-        <div class="note-card reveal">
-          <h3>Перед отправкой проверь</h3>
-          <ul>
-            <li>ФИО, звание, должность и личное дело.</li>
-            <li>Скриншоты или ссылки по каждой активности.</li>
-            <li>Дополнительные условия для нужного повышения.</li>
-            <li>Роль в моссетях, позывной, ВБ или практика задержания — если требуются.</li>
-            <li>Нет ли действующих взысканий или вопросов по дисциплине.</li>
-          </ul>
-        </div>
+      <div class="process reveal">
+        <div class="process__item"><span>1</span><h3>Открыл FAQ</h3><p>Проверил правила, законку, форумные темы и гайды.</p></div>
+        <div class="process__item"><span>2</span><h3>Закрыл активности</h3><p>Собрал скрины по требованиям и внёс количества в калькулятор.</p></div>
+        <div class="process__item"><span>3</span><h3>Сверил повышение</h3><p>Баллы — не всё. Поставки, патрули и практика тоже нужны.</p></div>
+        <div class="process__item"><span>4</span><h3>Скопировал рапорт</h3><p>Калькулятор сам соберёт текст, дальше только докинуть доказательства.</p></div>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <p>ОСН «Гром» · RMRP Кутузовский · статический сайт для GitHub Pages</p>
-    <a href="#top">Наверх</a>
+    <p>ОСН «Гром» · RMRP Кутузовский · <span id="year"></span></p>
+    <a href="admin.html">Редактор состава</a>
   </footer>
 
-  <script src="assets/js/app.js" defer></script>
+  <script src="assets/js/common.js" defer></script>
 </body>
 </html>

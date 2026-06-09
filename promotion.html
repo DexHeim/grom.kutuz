@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Система повышения ОСН Гром: требования по званиям, баллы, патрули, поставки, практика и документы.">
+  <meta name="theme-color" content="#0d2448">
+  <title>Повышение · ОСН «Гром»</title>
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="promotion">
+  <div class="noise" aria-hidden="true"></div>
+
+  <header class="site-header" id="top">
+    <a class="brand" href="index.html" aria-label="На главную"><span class="brand__mark">Г</span><span class="brand__text">ОСН <strong>Гром</strong></span></a>
+    <nav class="main-nav" aria-label="Основная навигация">
+      <a href="index.html" data-nav="home">Главная</a>
+      <a href="faq.html" data-nav="faq">FAQ</a>
+      <a href="promotion.html" data-nav="promotion">Повышение</a>
+      <a href="calculator.html" data-nav="calculator">Калькулятор</a>
+      <a href="roster.html" data-nav="roster">Состав</a>
+      <a href="memos.html" data-nav="memos">Памятки</a>
+    </nav>
+    <button class="theme-toggle" type="button" id="themeToggle" aria-label="Переключить тему"><span aria-hidden="true">◐</span><span class="theme-toggle__text">Тема</span></button>
+  </header>
+
+  <main>
+    <section class="page-hero section-pad section-pad--tight" aria-labelledby="page-title">
+      <div class="reveal">
+        <p class="eyebrow">Система повышения</p>
+        <h1 id="page-title">Что нужно для следующего звания</h1>
+        <p class="page-hero__lead">Баллы — это только часть условий. По ступеням также нужны патрули, поставки, практика задержания, аресты, штрафы, роль, позывной или военный билет.</p>
+        <div class="inline-actions">
+          <a class="btn btn--primary" href="calculator.html">Посчитать баллы</a>
+          <a class="btn btn--ghost" href="faq.html#links">Открыть ссылки</a>
+        </div>
+      </div>
+      <aside class="glass panel reveal">
+        <h3>Подача</h3>
+        <p class="muted">Перед рапортом сверяй не только итог калькулятора, но и дополнительные требования. Иначе получится классика: баллы есть, а повышение — хуй там.</p>
+      </aside>
+    </section>
+
+    <section class="section section-pad section-pad--tight" aria-labelledby="process-title">
+      <div class="section__head reveal">
+        <p class="eyebrow">Порядок</p>
+        <h2 id="process-title">Алгоритм повышения</h2>
+      </div>
+      <div class="process reveal">
+        <div class="process__item"><span>1</span><h3>Набрать баллы</h3><p>Считаются только подтверждённые активности из списка начисления.</p></div>
+        <div class="process__item"><span>2</span><h3>Закрыть условия</h3><p>Патрули, поставки, практика, аресты, штрафы и документы.</p></div>
+        <div class="process__item"><span>3</span><h3>Подать рапорт</h3><p>Приложить личное дело, доказательства и итог из калькулятора.</p></div>
+        <div class="process__item"><span>4</span><h3>Дождаться решения</h3><p>Повышение происходит по решению руководства подразделения.</p></div>
+      </div>
+    </section>
+
+    <section class="section section-pad section-pad--tight" aria-labelledby="rank-title">
+      <div class="section__head reveal">
+        <p class="eyebrow">Пороговая сетка</p>
+        <h2 id="rank-title">Звания и требования</h2>
+        <p>Карточки удобнее таблицы: на телефоне и узких мониторах ничего не распирает страницу.</p>
+      </div>
+      <div class="rank-grid" id="promotionCards"></div>
+    </section>
+
+    <section class="section section-pad section-pad--tight" aria-labelledby="proof-title">
+      <div class="section__head reveal">
+        <p class="eyebrow">Доказывать всё</p>
+        <h2 id="proof-title">Что часто забывают</h2>
+      </div>
+      <div class="cards cards--four">
+        <article class="card reveal"><span class="card__icon">01</span><h3>Патруль</h3><p>Нужны скрины начала, каждые 10 минут и окончания патруля.</p></article>
+        <article class="card reveal"><span class="card__icon">02</span><h3>Поставки</h3><p>Скрин зоны с линией или плашка о вознаграждении на финальной поставке.</p></article>
+        <article class="card reveal"><span class="card__icon">03</span><h3>Практика</h3><p>Для Старшина → Прапорщик требуется сдача практики задержания.</p></article>
+        <article class="card reveal"><span class="card__icon">04</span><h3>Документы</h3><p>Для Ст. Прапорщик → Мл. Лейтенант нужен военный билет.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>ОСН «Гром» · Повышение · <span id="year"></span></p>
+    <a href="#top">Наверх</a>
+  </footer>
+
+  <script src="assets/js/common.js" defer></script>
+  <script src="assets/js/site-data.js" defer></script>
+  <script src="assets/js/calculator.js" defer></script>
+</body>
+</html>

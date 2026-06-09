@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Калькулятор баллов ОСН Гром: активности, доказательства, итог и шаблон рапорта на повышение.">
+  <meta name="theme-color" content="#0d2448">
+  <title>Калькулятор баллов · ОСН «Гром»</title>
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="calculator">
+  <div class="noise" aria-hidden="true"></div>
+
+  <header class="site-header" id="top">
+    <a class="brand" href="index.html" aria-label="На главную"><span class="brand__mark">Г</span><span class="brand__text">ОСН <strong>Гром</strong></span></a>
+    <nav class="main-nav" aria-label="Основная навигация">
+      <a href="index.html" data-nav="home">Главная</a>
+      <a href="faq.html" data-nav="faq">FAQ</a>
+      <a href="promotion.html" data-nav="promotion">Повышение</a>
+      <a href="calculator.html" data-nav="calculator">Калькулятор</a>
+      <a href="roster.html" data-nav="roster">Состав</a>
+      <a href="memos.html" data-nav="memos">Памятки</a>
+    </nav>
+    <button class="theme-toggle" type="button" id="themeToggle" aria-label="Переключить тему"><span aria-hidden="true">◐</span><span class="theme-toggle__text">Тема</span></button>
+  </header>
+
+  <main>
+    <section class="page-hero section-pad section-pad--tight" aria-labelledby="page-title">
+      <div class="reveal">
+        <p class="eyebrow">Калькулятор баллов</p>
+        <h1 id="page-title">Подсчёт без таблицы, которая лезет боком</h1>
+        <p class="page-hero__lead">Каждая активность теперь отдельной карточкой: название, доказательство, баллы за 1, количество и итог. Горизонтального скролла внутри блока больше нет.</p>
+      </div>
+      <aside class="glass panel reveal">
+        <h3>Данные сохраняются</h3>
+        <p class="muted">Введённые числа остаются в браузере через localStorage. Это удобно для себя, но не является отправкой рапорта.</p>
+      </aside>
+    </section>
+
+    <section class="section section-pad section-pad--tight" id="calculator" aria-labelledby="calculator-title">
+      <div class="section__head reveal">
+        <p class="eyebrow">Начисление</p>
+        <h2 id="calculator-title">За что начисляются баллы</h2>
+        <p>Введите количество активностей. Итог, прогресс до следующего балльного порога и шаблон рапорта обновятся автоматически.</p>
+      </div>
+
+      <div class="calc-layout">
+        <div class="calc-card reveal">
+          <div class="calc-card__top">
+            <div>
+              <h3>Активности ОСН «Гром»</h3>
+              <p>Колонка с доказательствами встроена в карточки, чтобы не приходилось скроллить таблицу по горизонтали.</p>
+            </div>
+            <button class="mini-btn" type="button" id="fillExampleBtn">Пример</button>
+          </div>
+
+          <div class="activity-list" id="activityList" aria-label="Список активностей для подсчёта баллов"></div>
+        </div>
+
+        <aside class="summary-card glass reveal" aria-label="Итог калькулятора">
+          <span class="summary-card__label">Общий итог</span>
+          <strong id="totalPoints">0</strong>
+          <p id="promotionStatus">Введите активности, чтобы увидеть статус по повышению.</p>
+
+          <div class="progress" aria-label="Прогресс до следующего порога">
+            <div class="progress__bar" id="progressBar"></div>
+          </div>
+          <small id="nextThresholdText">Следующий порог: 350 баллов</small>
+
+          <div class="summary-card__meta">
+            <div><span id="totalActions">0</span><small>активностей</small></div>
+            <div><span id="activeRows">0</span><small>строк заполнено</small></div>
+          </div>
+
+          <div class="summary-card__actions">
+            <button class="btn btn--primary btn--wide" type="button" id="copyReportBtn">Скопировать отчёт</button>
+            <button class="btn btn--ghost btn--wide" type="button" id="resetBtn">Сбросить</button>
+          </div>
+          <p class="copy-status" id="copyStatus" role="status" aria-live="polite"></p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section section-pad section-pad--tight" id="report" aria-labelledby="report-title">
+      <div class="section__head reveal">
+        <p class="eyebrow">Рапорт</p>
+        <h2 id="report-title">Шаблон подачи на повышение</h2>
+        <p>Текст ниже обновляется от калькулятора. Его можно сразу скопировать и вставить в нужную тему или канал.</p>
+      </div>
+
+      <div class="report-grid">
+        <div class="report-card reveal">
+          <div class="report-card__head">
+            <h3>Текст рапорта</h3>
+            <button class="mini-btn" type="button" id="copyTemplateBtn">Скопировать</button>
+          </div>
+          <textarea id="reportTemplate" rows="15" spellcheck="false" aria-label="Шаблон рапорта"></textarea>
+        </div>
+        <div class="note-card reveal">
+          <h3>Перед отправкой проверь</h3>
+          <ul>
+            <li>ФИО, звание, должность и личное дело.</li>
+            <li>Скриншоты или ссылки по каждой активности.</li>
+            <li>Дополнительные условия для нужного повышения.</li>
+            <li>Роль в моссетях, позывной, ВБ или практика задержания — если требуются.</li>
+            <li>Нет ли действующих взысканий или вопросов по дисциплине.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>ОСН «Гром» · Калькулятор · <span id="year"></span></p>
+    <a href="#top">Наверх</a>
+  </footer>
+
+  <script src="assets/js/common.js" defer></script>
+  <script src="assets/js/site-data.js" defer></script>
+  <script src="assets/js/calculator.js" defer></script>
+</body>
+</html>
