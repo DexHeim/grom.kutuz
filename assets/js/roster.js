@@ -125,7 +125,7 @@
       member.position || 'Должность не указана',
       member.rank || 'Звание не указано',
       member.callsign ? `Позывной: ${member.callsign}` : '',
-      member.serviceId ? `Номер: ${member.serviceId}` : ''
+      member.serviceId ? `Жетон: ${member.serviceId}` : ''
     ].filter(Boolean);
 
     return `
@@ -277,6 +277,26 @@
     return null;
   }
 
+  function joinSheetColumns(cells, indexes) {
+    return indexes
+      .map((index) => clean(cells[index]))
+      .filter(Boolean)
+      .join(' ');
+  }
+
+  function splitServiceIdAndCallsign(serviceId, callsign) {
+    let id = clean(serviceId);
+    let call = clean(callsign);
+
+    if (id.includes('|')) {
+      const parts = id.split('|').map(clean).filter(Boolean);
+      id = parts.shift() || '';
+      call = [parts.join(' '), call].filter(Boolean).join(' ');
+    }
+
+    return { serviceId: id, callsign: call };
+  }
+
   function parseSheetMember(cells, currentGroup) {
     const normalizedCells = cells.map(clean);
     const compact = normalizedCells.filter(Boolean);
@@ -285,40 +305,29 @@
 
     if (compact.length === 1) return parseLooseMember(compact[0], currentGroup);
 
-    const name = normalizedCells[0] || (/вакант|свободн/i.test(rawText) ? 'Вакантно' : 'Без ФИО');
-    const serviceId = isServiceNumber(normalizedCells[1]) ? normalizedCells[1] : '';
+    const rawName = joinSheetColumns(normalizedCells, [0, 1]);
+    const rawServiceId = joinSheetColumns(normalizedCells, [2, 3]);
+    const rawCallsign = joinSheetColumns(normalizedCells, [4, 5]);
+    const rawPosition = joinSheetColumns(normalizedCells, [6, 7]);
+    const rawRank = clean(normalizedCells[8]);
+    const rawNote = [clean(normalizedCells[9]), ...normalizedCells.slice(10).map(clean)]
+      .filter(Boolean)
+      .join(' · ');
 
-    let callsign = clean(normalizedCells[2]);
-    let positionIndex = 3;
-    const fourth = clean(normalizedCells[3]);
-
-    if (fourth && !isRole(fourth) && !isRank(fourth)) {
-      callsign = clean([callsign, fourth].filter(Boolean).join(' '));
-      positionIndex = 4;
-    } else if (!fourth && normalizedCells[4]) {
-      positionIndex = 4;
-    }
-
-    let position = clean(normalizedCells[positionIndex]);
-    let rank = clean(normalizedCells[positionIndex + 1]);
-    let note = normalizedCells.slice(positionIndex + 2).map(clean).filter(Boolean).join(' · ');
-
-    if (!position && isRole(rank)) {
-      position = rank;
-      rank = clean(normalizedCells[positionIndex + 2]);
-      note = normalizedCells.slice(positionIndex + 3).map(clean).filter(Boolean).join(' · ');
-    }
+    const vacant = /вакант|свободн/i.test(rawText);
+    const { serviceId, callsign } = splitServiceIdAndCallsign(rawServiceId, rawCallsign);
 
     const member = {
-      name,
-      rank,
-      position,
+      name: rawName || (vacant ? 'Вакантно' : 'Без ФИО'),
+      rank: rawRank,
+      position: rawPosition || (vacant ? 'Свободная позиция' : ''),
       callsign,
       serviceId,
-      note
+      note: rawNote
     };
+
     member.status = guessStatus(member, rawText);
-    if (member.status === 'vacant' && normalize(member.name).includes('вакант')) member.name = 'Вакантно';
+    if (member.status === 'vacant') member.name = 'Вакантно';
     member.groupTitle = groupFromMember(member, currentGroup);
     return member;
   }
