@@ -33,9 +33,17 @@
     if (year) year.textContent = new Date().getFullYear();
   }
 
+  function cleanupRemovedFaqItems() {
+    if (document.body.dataset.page !== 'faq') return;
+    $$('.hierarchy-list > div').forEach((item) => {
+      if (item.textContent.includes('Старший оперативник ОСН')) item.remove();
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     initActiveNav();
     initFooterYear();
+    cleanupRemovedFaqItems();
   });
 })();
