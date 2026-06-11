@@ -12,7 +12,8 @@
     gmp: 'ГМП', reports: 'Инструктор', exams: 'Инструктор', supply: 'Поставка',
     raid_participation: 'Налёты', raid_success: 'Налёты', robbery_success: 'Ограбления',
     flat_robbery: 'Ограбления', kraz_participation: 'КРАЗ', kraz_success: 'КРАЗ',
-    ik7: 'ИК-7', patrol: 'Патруль', training: 'Тренировка', arrest: 'Арест', fine: 'Штраф'
+    ik7: 'ИК-7', patrol: 'Патруль', training: 'Тренировка', reinforced_patrol: 'Патруль',
+    duty_unit: 'ДП', arrest: 'Арест', fine: 'Штраф'
   };
 
   const $id = (id) => document.getElementById(id);

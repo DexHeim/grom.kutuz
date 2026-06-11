@@ -236,21 +236,22 @@
     return /(сержант|старшина|прапорщик|лейтенант|капитан|майор|подполковник|полковник|генерал)/i.test(text);
   }
 
-  function guessStatus(member, rawText) {
-    const text = normalize([rawText, member.name, member.position, member.rank, member.note].join(' '));
+  function guessStatus(member, rawText, currentGroup = '') {
+    const text = normalize([rawText, member.name, member.position, member.rank, member.note, currentGroup].join(' '));
     if (/вакант|свободн/.test(text)) return 'vacant';
     if (/отпуск/.test(text)) return 'leave';
     if (/кадров|резерв/.test(text)) return 'reserve';
     if (/стаж[её]р/.test(text)) return 'trainee';
+    if (/актив|действующ/.test(text)) return 'active';
     return 'active';
   }
 
   function groupFromMember(member, currentGroup) {
     const text = normalize([member.name, member.position, member.rank, member.note].join(' '));
     if (currentGroup === 'Командование' || /командир|зам\.?\s*ком|руковод/.test(text)) return 'Командование';
-    if (/инструктор/.test(text)) return 'Инструкторский состав';
+    if (/старш(?:ий|его)?\s+инструктор|инструктор/.test(text)) return 'Инструкторский состав';
     if (/стаж[её]р/.test(text)) return 'Стажёрский состав';
-    if (/кадров|резерв/.test(text)) return 'Кадровый резерв';
+    if (member.status === 'reserve' || /кадров|резерв/.test(text)) return 'Кадровый резерв';
     return currentGroup && GROUP_ORDER.includes(currentGroup) ? currentGroup : 'Оперативный состав';
   }
 
@@ -326,7 +327,7 @@
       note: rawNote
     };
 
-    member.status = guessStatus(member, rawText);
+    member.status = guessStatus(member, rawText, currentGroup);
     if (member.status === 'vacant') member.name = 'Вакантно';
     member.groupTitle = groupFromMember(member, currentGroup);
     return member;
