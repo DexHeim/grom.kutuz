@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#0d2448">
   <title>Калькулятор баллов · ОСН «Гром»</title>
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/style.css?v=20260611-3">
 </head>
 <body data-page="calculator">
   <div class="noise" aria-hidden="true"></div>
@@ -90,6 +90,7 @@
 
             <div class="summary-card__actions">
               <button class="btn btn--primary btn--wide" type="button" id="copyReportBtn">Скопировать рапорт</button>
+              <a class="btn btn--ghost btn--wide" href="https://discord.com/channels/1465392165453828138/1465600194199552064" target="_blank" rel="noopener noreferrer">Канал повышения</a>
               <a class="btn btn--ghost btn--wide" href="promotion.html">Открыть систему повышения</a>
             </div>
             <p class="copy-status" id="copyStatus" aria-live="polite"></p>
@@ -118,7 +119,82 @@
             <li>Личное дело, военный билет и прочие условия — если они нужны для ступени.</li>
             <li>Ссылку на таблицу можно оставить как запасной вариант.</li>
           </ul>
-          <div class="info-box">Итог по баллам не отменяет дополнительные условия повышения.</div>
+          <div class="info-box">Итог по баллам не отменяет дополнительные условия повышения. Отчёт скидывай в <a href="https://discord.com/channels/1465392165453828138/1465600194199552064" target="_blank" rel="noopener noreferrer">канал повышения</a>.</div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section section-pad section-pad--tight" id="warehouse-calculator" aria-labelledby="warehouse-title">
+      <div class="section__head reveal">
+        <p class="eyebrow">Склад</p>
+        <h2 id="warehouse-title">Калькулятор запроса склада</h2>
+        <p>Выбери звание, введи позывной и ID — лимиты подтянутся автоматически. Склад брать разрешено раз в 6 часов.</p>
+      </div>
+
+      <div class="report-grid warehouse-grid">
+        <article class="report-card reveal">
+          <div class="report-card__head">
+            <div>
+              <p class="eyebrow">Запрос</p>
+              <h3>Данные сотрудника</h3>
+            </div>
+            <a class="mini-btn" href="https://discord.com/channels/1465392165453828138/1465600295424884889" target="_blank" rel="noopener noreferrer">Канал склада</a>
+          </div>
+
+          <div class="form-grid warehouse-form">
+            <label class="field field--full">
+              <span class="mini-label">звание</span>
+              <select id="warehouseRank"></select>
+            </label>
+            <label class="field">
+              <span class="mini-label">позывной</span>
+              <input id="warehouseCallsign" type="text" placeholder="Кириешка">
+            </label>
+            <label class="field">
+              <span class="mini-label">статический ID</span>
+              <input id="warehouseServiceId" type="text" inputmode="numeric" placeholder="345-856">
+            </label>
+            <label class="field">
+              <span class="mini-label">оружие</span>
+              <input id="warehouseWeapons" data-warehouse-count="weapons" type="number" min="0" step="1">
+            </label>
+            <label class="field">
+              <span class="mini-label">материалы</span>
+              <input id="warehouseMaterials" data-warehouse-count="materials" type="number" min="0" step="1">
+            </label>
+            <label class="field">
+              <span class="mini-label">бронежилеты</span>
+              <input id="warehouseArmor" data-warehouse-count="armor" type="number" min="0" step="1">
+            </label>
+            <label class="field">
+              <span class="mini-label">аптечки</span>
+              <input id="warehouseMedkits" data-warehouse-count="medkits" type="number" min="0" step="1">
+            </label>
+            <label class="field">
+              <span class="mini-label">дефибрилляторы</span>
+              <input id="warehouseDefibs" data-warehouse-count="defibs" type="number" min="0" step="1">
+            </label>
+            <label class="field">
+              <span class="mini-label">обезболивающее</span>
+              <input id="warehousePainkillers" data-warehouse-count="painkillers" type="number" min="0" step="1">
+            </label>
+          </div>
+
+          <div class="warehouse-actions">
+            <button class="btn btn--primary" type="button" id="copyWarehouseBtn">Скопировать запрос</button>
+            <button class="mini-btn mini-btn--danger" type="button" id="resetWarehouseBtn">Сбросить</button>
+          </div>
+          <p class="copy-status" id="warehouseCopyStatus" aria-live="polite"></p>
+          <textarea id="warehouseTemplate" spellcheck="false" aria-label="Шаблон запроса склада"></textarea>
+        </article>
+
+        <aside class="note-card reveal warehouse-limits">
+          <h3>Лимит по званию</h3>
+          <div class="warehouse-tier" id="warehouseTier">Выбери звание</div>
+          <div class="warehouse-limit-list" id="warehouseLimitList"></div>
+          <div class="info-box">Оружие выбирается из разрешённого списка. Запрос отправляй в <a href="https://discord.com/channels/1465392165453828138/1465600295424884889" target="_blank" rel="noopener noreferrer">канал склада</a>.</div>
+          <h3>Разрешённое оружие</h3>
+          <div class="warehouse-weapons" id="warehouseWeaponList"></div>
         </aside>
       </div>
     </section>
@@ -131,6 +207,6 @@
 
   <script src="assets/js/common.js" defer></script>
   <script src="assets/js/site-data.js" defer></script>
-  <script src="assets/js/calculator.js" defer></script>
+  <script src="assets/js/calculator.js?v=20260611-1" defer></script>
 </body>
 </html>

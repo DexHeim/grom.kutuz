@@ -4,6 +4,47 @@
   const activities = window.GROM_ACTIVITIES || [];
   const promotionSteps = window.GROM_PROMOTION_STEPS || [];
   const storageKey = 'osn-grom-calculator-v4';
+  const warehouseStorageKey = 'osn-grom-warehouse-calculator-v1';
+  const promotionReportChannelUrl = 'https://discord.com/channels/1465392165453828138/1465600194199552064';
+  const warehouseChannelUrl = 'https://discord.com/channels/1465392165453828138/1465600295424884889';
+
+  const warehouseTiers = [
+    {
+      id: 'sergeant',
+      title: '@||| Сержант полиции - @❚ Старшина полиции',
+      ranks: ['Сержант полиции', 'Ст. сержант полиции', 'Старшина полиции'],
+      limits: { weapons: 1, materials: 500, armor: 2, medkits: 5, defibs: 2, painkillers: 3 },
+      weapons: ['Таурус "Бешеный бык"', 'Сайга-12К', 'АК-12', 'Штейр АУГ-А3']
+    },
+    {
+      id: 'warrant',
+      title: '@☆☆ Прапорщик полиции - @✮ Младший лейтенант полиции',
+      ranks: ['Прапорщик полиции', 'Ст. прапорщик полиции', 'Младший лейтенант полиции'],
+      limits: { weapons: 2, materials: 1000, armor: 5, medkits: 5, defibs: 3, painkillers: 5 },
+      weapons: ['Таурус "Бешеный бык"', 'Сайга-12К', 'АК-12', 'Штейр АУГ-А3', 'Кольт М16', 'Кольт 416 "Канада"']
+    },
+    {
+      id: 'lieutenant',
+      title: '@✮✮ Лейтенант полиции - @✮✮✮✮ Капитан полиции',
+      ranks: ['Лейтенант полиции', 'Ст. лейтенант полиции', 'Капитан полиции'],
+      limits: { weapons: 3, materials: 1000, armor: 10, medkits: 10, defibs: 3, painkillers: 8 },
+      weapons: ['Таурус "Бешеный бык"', 'Сайга-12К', 'АК-12', 'Штейр АУГ-А3', 'Кольт М16', 'Кольт 416 "Канада"', 'САР М249']
+    },
+    {
+      id: 'major',
+      title: '@★ Майор полиции - @★★ Подполковник полиции',
+      ranks: ['Майор полиции', 'Подполковник полиции'],
+      limits: { weapons: 3, materials: 2000, armor: 15, medkits: 15, defibs: 5, painkillers: 10 },
+      weapons: ['Таурус "Бешеный бык"', 'Сайга-12К', 'АК-12', 'Штейр АУГ-А3', 'Кольт М16', 'Кольт 416 "Канада"', 'САР М249', 'FN-Scar']
+    },
+    {
+      id: 'colonel',
+      title: '@★★★ Полковник полиции - @⭐ Генерал-майор полиции',
+      ranks: ['Полковник полиции', 'Генерал-майор полиции'],
+      limits: { weapons: 3, materials: 2000, armor: 20, medkits: 25, defibs: 15, painkillers: 15, otherMedical: 15 },
+      weapons: ['3 единицы оружия по разрешению руководства']
+    }
+  ];
 
   const $ = (selector, parent = document) => parent.querySelector(selector);
   const $$ = (selector, parent = document) => Array.from(parent.querySelectorAll(selector));
@@ -266,6 +307,7 @@
         'Подразделение: ОСН «Гром»',
         `Итоговая сумма баллов: ${totalPoints}`,
         `Статус по балльной сетке: ${statusText}`,
+        `Канал подачи отчёта: ${promotionReportChannelUrl}`,
         '',
         'Активности:',
         activityText,
@@ -392,5 +434,228 @@
   document.addEventListener('DOMContentLoaded', () => {
     renderPromotionCards();
     initCalculator();
+    initWarehouseCalculator();
   });
+
+  function initWarehouseCalculator() {
+    const rankSelect = $id('warehouseRank');
+    if (!rankSelect) return;
+
+    const elements = {
+      rank: rankSelect,
+      callsign: $id('warehouseCallsign'),
+      serviceId: $id('warehouseServiceId'),
+      weapons: $id('warehouseWeapons'),
+      materials: $id('warehouseMaterials'),
+      armor: $id('warehouseArmor'),
+      medkits: $id('warehouseMedkits'),
+      defibs: $id('warehouseDefibs'),
+      painkillers: $id('warehousePainkillers'),
+      tier: $id('warehouseTier'),
+      limits: $id('warehouseLimitList'),
+      weaponList: $id('warehouseWeaponList'),
+      template: $id('warehouseTemplate'),
+      copy: $id('copyWarehouseBtn'),
+      reset: $id('resetWarehouseBtn'),
+      status: $id('warehouseCopyStatus')
+    };
+
+    const countKeys = ['weapons', 'materials', 'armor', 'medkits', 'defibs', 'painkillers'];
+    const state = loadWarehouseState();
+
+    function loadWarehouseState() {
+      try {
+        const raw = localStorage.getItem(warehouseStorageKey);
+        const parsed = raw ? JSON.parse(raw) : {};
+        return typeof parsed === 'object' && parsed !== null ? parsed : {};
+      } catch {
+        return {};
+      }
+    }
+
+    function saveWarehouseState() {
+      localStorage.setItem(warehouseStorageKey, JSON.stringify(state));
+    }
+
+    function findTierByRank(rank) {
+      return warehouseTiers.find((tier) => tier.ranks.includes(rank)) || null;
+    }
+
+    function getTierByRank(rank) {
+      return findTierByRank(rank) || warehouseTiers[0];
+    }
+
+    function getSelectedTier() {
+      return getTierByRank(elements.rank.value);
+    }
+
+    function fillRankOptions() {
+      elements.rank.innerHTML = warehouseTiers.map((tier) => {
+        const options = tier.ranks.map((rank) => `<option value="${escapeHtml(rank)}">${escapeHtml(rank)}</option>`).join('');
+        return `<optgroup label="${escapeHtml(tier.title)}">${options}</optgroup>`;
+      }).join('');
+    }
+
+    function sanitizeWarehouseCount(value, max) {
+      const parsed = Number.parseInt(String(value).replace(/\D/g, ''), 10);
+      if (Number.isNaN(parsed) || parsed < 0) return 0;
+      return Math.min(parsed, max);
+    }
+
+    function getBadgeNumber() {
+      const digits = String(elements.serviceId.value || '').replace(/\D/g, '');
+      return digits.length >= 2 ? digits.slice(-2) : 'NN';
+    }
+
+    function getCounts() {
+      const tier = getSelectedTier();
+      const counts = {};
+      countKeys.forEach((key) => {
+        counts[key] = sanitizeWarehouseCount(elements[key].value, tier.limits[key] ?? 0);
+      });
+
+      if (tier.limits.otherMedical && counts.defibs + counts.painkillers > tier.limits.otherMedical) {
+        counts.painkillers = Math.max(0, tier.limits.otherMedical - counts.defibs);
+      }
+
+      return counts;
+    }
+
+    function writeCounts(counts) {
+      countKeys.forEach((key) => {
+        elements[key].max = getSelectedTier().limits[key] ?? 0;
+        elements[key].value = counts[key] || '';
+      });
+    }
+
+    function fillMaximums() {
+      const tier = getSelectedTier();
+      const counts = { ...tier.limits };
+      if (tier.limits.otherMedical) {
+        counts.defibs = 5;
+        counts.painkillers = Math.max(0, tier.limits.otherMedical - counts.defibs);
+      }
+      writeCounts(counts);
+    }
+
+    function renderLimits(tier) {
+      const limitRows = [
+        ['Оружие и боеприпасы', `${tier.limits.weapons} ед.`],
+        ['Материалы', `${numberFormat(tier.limits.materials)} ед.`],
+        ['Бронежилеты', `${tier.limits.armor} ед.`],
+        ['Аптечки', `${tier.limits.medkits} ед.`],
+        tier.limits.otherMedical
+          ? ['Дефибриллятор + обезболивающее', `${tier.limits.otherMedical} предметов суммарно`]
+          : ['Дефибрилляторы / обезболивающее', `${tier.limits.defibs} / ${tier.limits.painkillers} ед.`]
+      ];
+
+      elements.tier.textContent = tier.title;
+      elements.limits.innerHTML = limitRows.map(([label, value]) => `
+        <div class="warehouse-limit-row">
+          <span>${escapeHtml(label)}</span>
+          <strong>${escapeHtml(value)}</strong>
+        </div>
+      `).join('');
+      elements.weaponList.innerHTML = tier.weapons.map((weapon) => `<span>${escapeHtml(weapon)}</span>`).join('');
+    }
+
+    function buildWarehouseMessage() {
+      const tier = getSelectedTier();
+      const counts = getCounts();
+      const callsign = elements.callsign.value.trim() || '[позывной]';
+      const serviceId = elements.serviceId.value.trim() || '[статический ID]';
+      const badgeNumber = getBadgeNumber();
+
+      const medicalLine = tier.limits.otherMedical
+        ? `Дефибриллятор / обезболивающее: ${counts.defibs + counts.painkillers} предметов суммарно (${counts.defibs} дефиб., ${counts.painkillers} обезб.)`
+        : `Дефибриллятор: ${counts.defibs} ед.\nОбезболивающее: ${counts.painkillers} ед.`;
+
+      return [
+        'Запрос склада ОСН «ГРОМ»',
+        '',
+        `Канал запроса: ${warehouseChannelUrl}`,
+        `Звание: ${elements.rank.value}`,
+        `Позывной: ${callsign}`,
+        `Статический ID: ${serviceId}`,
+        `Жетон: /do На бронежилете висит нагрудный знак : «УВД | ОСН ГРОМ | ${callsign} | ${badgeNumber}-ой».`,
+        '',
+        `Лимит: ${tier.title}`,
+        `Оружие и боеприпасы: ${counts.weapons} ед. из списка: ${tier.weapons.join(', ')}`,
+        `Материалы: ${counts.materials} ед.`,
+        `Экипировка (бронежилеты): ${counts.armor} ед.`,
+        `Медикаменты (аптечки): ${counts.medkits} ед.`,
+        medicalLine,
+        '',
+        'Склад беру не чаще 1 раза в 6 часов.'
+      ].join('\n');
+    }
+
+    function updateWarehouse() {
+      const tier = getSelectedTier();
+      renderLimits(tier);
+      const counts = getCounts();
+      writeCounts(counts);
+
+      state.rank = elements.rank.value;
+      state.callsign = elements.callsign.value;
+      state.serviceId = elements.serviceId.value;
+      state.counts = counts;
+      saveWarehouseState();
+
+      elements.template.value = buildWarehouseMessage();
+    }
+
+    function restoreWarehouseState() {
+      fillRankOptions();
+      elements.rank.value = state.rank && findTierByRank(state.rank) ? state.rank : warehouseTiers[0].ranks[0];
+      elements.callsign.value = state.callsign || '';
+      elements.serviceId.value = state.serviceId || '';
+      const tier = getSelectedTier();
+      const counts = state.counts || tier.limits;
+      writeCounts(counts);
+    }
+
+    async function copyWarehouseText() {
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(elements.template.value);
+        } else {
+          const temp = document.createElement('textarea');
+          temp.value = elements.template.value;
+          temp.setAttribute('readonly', '');
+          temp.style.position = 'fixed';
+          temp.style.top = '-1000px';
+          document.body.appendChild(temp);
+          temp.select();
+          document.execCommand('copy');
+          temp.remove();
+        }
+        elements.status.textContent = 'Запрос склада скопирован.';
+      } catch {
+        elements.status.textContent = 'Не вышло скопировать автоматически. Выделите текст вручную.';
+      }
+      window.clearTimeout(copyWarehouseText.timeoutId);
+      copyWarehouseText.timeoutId = window.setTimeout(() => { elements.status.textContent = ''; }, 2800);
+    }
+
+    restoreWarehouseState();
+    updateWarehouse();
+    elements.rank.addEventListener('change', () => {
+      fillMaximums();
+      updateWarehouse();
+    });
+    [elements.callsign, elements.serviceId, ...countKeys.map((key) => elements[key])].forEach((element) => {
+      element.addEventListener('input', updateWarehouse);
+      element.addEventListener('blur', updateWarehouse);
+    });
+    elements.copy.addEventListener('click', copyWarehouseText);
+    elements.reset.addEventListener('click', () => {
+      localStorage.removeItem(warehouseStorageKey);
+      Object.keys(state).forEach((key) => { delete state[key]; });
+      restoreWarehouseState();
+      fillMaximums();
+      updateWarehouse();
+      elements.status.textContent = 'Калькулятор склада очищен.';
+    });
+  }
 })();

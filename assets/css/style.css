@@ -886,6 +886,59 @@ textarea, .json-editor { min-height: 390px; resize: vertical; line-height: 1.55;
 .selected-activity strong { margin: 0; color: var(--accent); font-size: .98rem; letter-spacing: 0; }
 .copy-status[data-danger="true"], #loginStatus[data-danger="true"] { color: var(--danger) !important; }
 
+.warehouse-grid { align-items: start; }
+.warehouse-form { margin: .6rem 0 1rem; }
+.warehouse-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .65rem;
+  align-items: center;
+  margin: 0 0 .8rem;
+}
+.warehouse-tier {
+  margin: .65rem 0 1rem;
+  padding: .8rem .85rem;
+  border: 1px solid color-mix(in srgb, var(--primary) 45%, var(--line));
+  border-radius: var(--radius-sm);
+  color: var(--accent);
+  background: color-mix(in srgb, var(--primary) 10%, transparent);
+  font-weight: 950;
+}
+.warehouse-limit-list {
+  display: grid;
+  gap: .55rem;
+  margin-bottom: 1rem;
+}
+.warehouse-limit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .8rem;
+  padding: .7rem .75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-soft);
+}
+.warehouse-limit-row span { color: var(--muted); font-size: .88rem; }
+.warehouse-limit-row strong { color: var(--text); font-weight: 950; white-space: nowrap; }
+.warehouse-weapons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+}
+.warehouse-weapons span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: .24rem .58rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--primary-2);
+  background: var(--surface-soft);
+  font-size: .78rem;
+  font-weight: 900;
+}
+
 .roster-summary-panel p { margin: 1rem 0 0; }
 .roster-stats {
   display: grid;
