@@ -10,6 +10,7 @@
     'Инструкторский состав',
     'Оперативный состав',
     'Стажёрский состав',
+    'Вакантно',
     'Кадровый резерв'
   ];
 
@@ -248,6 +249,7 @@
 
   function groupFromMember(member, currentGroup) {
     const text = normalize([member.name, member.position, member.rank, member.note].join(' '));
+    if (member.status === 'vacant') return 'Вакантно';
     if (currentGroup === 'Командование' || /командир|зам\.?\s*ком|руковод/.test(text)) return 'Командование';
     if (/старш(?:ий|его)?\s+инструктор|инструктор/.test(text)) return 'Инструкторский состав';
     if (/стаж[её]р/.test(text)) return 'Стажёрский состав';
@@ -336,6 +338,7 @@
       member.note = rawNote || 'Место доступно для перевода в резерв';
     } else if (member.status === 'vacant') {
       member.name = 'Вакантно';
+      member.note = member.note || 'Свободная позиция';
     }
     member.groupTitle = groupFromMember(member, currentGroup);
     return member;
