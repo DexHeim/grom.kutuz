@@ -35,7 +35,7 @@
 
   function cleanupRemovedFaqItems() {
     if (document.body.dataset.page !== 'faq') return;
-    const removedTitles = ['Старший инструктор ОСН', 'Старший оперативник ОСН'];
+    const removedTitles = ['Старший оперативник ОСН'];
     $$('.hierarchy-list > div').forEach((item) => {
       if (removedTitles.some((title) => item.textContent.includes(title))) item.remove();
     });
