@@ -577,7 +577,7 @@
         `Звание: ${elements.rank.value}`,
         `Позывной: ${callsign}`,
         `Статический ID: ${serviceId}`,
-        `Жетон: /do На бронежилете висит нагрудный знак : «УВД | ОСН ГРОМ | ${callsign} | ${badgeNumber}-ой».`,
+        `Жетон: /do На бронежилете висит нагрудный знак : «УВД | ОСН ГРОМ | ${callsign} | ${badgeNumber}-й».`,
         '',
         `Лимит: ${tier.title}`,
         `Оружие и боеприпасы: ${counts.weapons} ед. из списка: ${tier.weapons.join(', ')}`,

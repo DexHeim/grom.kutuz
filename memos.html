@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#0d2448">
   <title>Памятки · ОСН «Гром»</title>
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/css/style.css?v=20260611-2">
+  <link rel="stylesheet" href="assets/css/style.css?v=20260611-5">
 </head>
 <body data-page="memos">
   <div class="noise" aria-hidden="true"></div>
@@ -228,7 +228,23 @@
             <li>Товарищ подполковник, за время несения службы произошло [перечислить] / происшествий не случилось. Доложил старший ДП сержант Иванов.</li>
             <li>Докладывает: Сержант Иванов, сдал наряд ДП. Состав: 1. Код-1.</li>
           </ol>
-          <div class="info-box">Жетон: <code>/do На бронежилете висит нагрудный знак : «УВД | ОСН ГРОМ | Позывной | NN-ой».</code><br><small>NN — две последние цифры статистического ID на сервере.</small></div>
+          <div class="info-box">Жетон: <code>/do На бронежилете висит нагрудный знак : «УВД | ОСН ГРОМ | Позывной | NN-й».</code><br><small>NN — две последние цифры статистического ID на сервере.</small></div>
+          <div class="badge-generator" aria-label="Быстрое копирование жетона">
+            <label class="field">
+              <span class="mini-label">позывной</span>
+              <input id="badgeCallsign" type="text" placeholder="Кириешка">
+            </label>
+            <label class="field">
+              <span class="mini-label">статический ID</span>
+              <input id="badgeServiceId" type="text" inputmode="numeric" placeholder="345-856">
+            </label>
+            <label class="field field--full">
+              <span class="mini-label">готовая строка</span>
+              <textarea id="badgeTemplate" spellcheck="false" readonly></textarea>
+            </label>
+            <button class="btn btn--primary" type="button" id="copyBadgeBtn">Скопировать жетон</button>
+            <p class="copy-status" id="badgeCopyStatus" aria-live="polite"></p>
+          </div>
         </article>
       </div>
     </section>
@@ -286,6 +302,47 @@
 
       input.addEventListener('input', updateLawSearch);
       updateLawSearch();
+
+      const badgeCallsign = document.getElementById('badgeCallsign');
+      const badgeServiceId = document.getElementById('badgeServiceId');
+      const badgeTemplate = document.getElementById('badgeTemplate');
+      const copyBadgeBtn = document.getElementById('copyBadgeBtn');
+      const badgeCopyStatus = document.getElementById('badgeCopyStatus');
+
+      function updateBadgeTemplate() {
+        if (!badgeTemplate) return;
+        const callsign = (badgeCallsign?.value || '').trim() || 'Позывной';
+        const digits = String(badgeServiceId?.value || '').replace(/\D/g, '');
+        const badgeNumber = digits.length >= 2 ? digits.slice(-2) : 'NN';
+        badgeTemplate.value = `/do На бронежилете висит нагрудный знак : «УВД | ОСН ГРОМ | ${callsign} | ${badgeNumber}-й».`;
+      }
+
+      async function copyBadgeTemplate() {
+        if (!badgeTemplate) return;
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(badgeTemplate.value);
+          } else {
+            badgeTemplate.removeAttribute('readonly');
+            badgeTemplate.select();
+            document.execCommand('copy');
+            badgeTemplate.setAttribute('readonly', '');
+          }
+          if (badgeCopyStatus) badgeCopyStatus.textContent = 'Жетон скопирован.';
+        } catch {
+          if (badgeCopyStatus) badgeCopyStatus.textContent = 'Не вышло скопировать автоматически. Выделите текст вручную.';
+        }
+        window.clearTimeout(copyBadgeTemplate.timeoutId);
+        copyBadgeTemplate.timeoutId = window.setTimeout(() => {
+          if (badgeCopyStatus) badgeCopyStatus.textContent = '';
+        }, 2800);
+      }
+
+      [badgeCallsign, badgeServiceId].forEach((inputNode) => {
+        if (inputNode) inputNode.addEventListener('input', updateBadgeTemplate);
+      });
+      if (copyBadgeBtn) copyBadgeBtn.addEventListener('click', copyBadgeTemplate);
+      updateBadgeTemplate();
     });
   </script>
 </body>

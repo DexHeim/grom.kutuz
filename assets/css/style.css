@@ -390,6 +390,15 @@ h3 {
   font: 850 .95rem/1.6 ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
   white-space: pre-wrap;
 }
+.badge-generator {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .75rem;
+  margin-top: 1rem;
+}
+.badge-generator textarea { min-height: 96px; }
+.badge-generator .btn,
+.badge-generator .copy-status { grid-column: 1 / -1; }
 .hierarchy-list { display: grid; gap: 0.65rem; }
 .hierarchy-list div, .requirement-chip {
   display: grid;
