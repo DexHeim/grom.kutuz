@@ -77,6 +77,7 @@
       member.callsign,
       member.serviceId,
       member.note,
+      member.badge,
       member.groupTitle,
       statusText(member.status)
     ].map(normalize).join(' ');
@@ -122,6 +123,7 @@
   }
 
   function renderMember(member) {
+    const badge = member.badge || statusText(member.status);
     const chips = [
       member.position || 'Должность не указана',
       member.rank || 'Звание не указано',
@@ -138,7 +140,7 @@
               <h4>${escapeHtml(member.name || (member.status === 'vacant' ? 'Вакантно' : 'Без ФИО'))}</h4>
               <p>${escapeHtml(member.status === 'vacant' ? 'Свободная позиция' : (member.rank || member.position || 'Данные не указаны'))}</p>
             </div>
-            <span class="${statusClass(member.status)}">${escapeHtml(statusText(member.status))}</span>
+            <span class="${statusClass(member.status)}">${escapeHtml(badge)}</span>
           </div>
           <div class="member-card__chips">
             ${chips.map((chip) => `<span>${escapeHtml(chip)}</span>`).join('')}
@@ -238,7 +240,7 @@
   }
 
   function guessStatus(member, rawText, currentGroup = '') {
-    const text = normalize([rawText, member.name, member.position, member.rank, member.note, currentGroup].join(' '));
+    const text = normalize([rawText, member.name, member.position, member.rank, member.note, member.badge, currentGroup].join(' '));
     if (/отпуск/.test(text)) return 'leave';
     if (/кадров|резерв/.test(text)) return 'reserve';
     if (/вакант|свободн/.test(text)) return 'vacant';
@@ -248,7 +250,7 @@
   }
 
   function groupFromMember(member, currentGroup) {
-    const text = normalize([member.name, member.position, member.rank, member.note].join(' '));
+    const text = normalize([member.name, member.position, member.rank, member.note, member.badge].join(' '));
     if (member.status === 'vacant') return 'Вакантно';
     if (currentGroup === 'Командование' || /командир|зам\.?\s*ком|руковод/.test(text)) return 'Командование';
     if (/старш(?:ий|его)?\s+инструктор|инструктор/.test(text)) return 'Инструкторский состав';
@@ -273,7 +275,7 @@
     if (!value || /^\d+$/.test(value)) return null;
     const vacant = /вакант|свободн/i.test(value);
     if (vacant) {
-      const member = { name: 'Вакантно', rank: '', position: value.replace(/вакантно?/i, '').trim() || 'Свободная позиция', callsign: '', serviceId: '', note: '' };
+      const member = { name: 'Вакантно', rank: '', position: value.replace(/вакантно?/i, '').trim() || 'Свободная позиция', callsign: '', serviceId: '', badge: 'Вакантно', note: '' };
       member.status = 'vacant';
       member.groupTitle = groupFromMember(member, currentGroup);
       return member;
@@ -314,7 +316,8 @@
     const rawCallsign = joinSheetColumns(normalizedCells, [4, 5]);
     const rawPosition = joinSheetColumns(normalizedCells, [6, 7]);
     const rawRank = clean(normalizedCells[8]);
-    const rawNote = [clean(normalizedCells[9]), ...normalizedCells.slice(10).map(clean)]
+    const rawBadge = clean(normalizedCells[9]);
+    const rawNote = normalizedCells.slice(10).map(clean)
       .filter(Boolean)
       .join(' · ');
 
@@ -327,6 +330,7 @@
       position: rawPosition || (vacant ? 'Свободная позиция' : ''),
       callsign,
       serviceId,
+      badge: rawBadge,
       note: rawNote
     };
 
@@ -335,9 +339,11 @@
       member.name = 'Кадровый резерв';
       member.rank = rawRank && !/вакант/i.test(rawRank) ? rawRank : '';
       member.position = 'Свободный слот кадрового резерва';
+      member.badge = rawBadge || 'Вакантно';
       member.note = rawNote || 'Место доступно для перевода в резерв';
     } else if (member.status === 'vacant') {
       member.name = 'Вакантно';
+      member.badge = member.badge || 'Вакантно';
       member.note = member.note || 'Свободная позиция';
     }
     member.groupTitle = groupFromMember(member, currentGroup);
