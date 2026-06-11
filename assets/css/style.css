@@ -390,6 +390,66 @@ h3 {
 }
 .hierarchy-list strong, .requirement-chip strong { color: var(--primary-2); }
 
+.law-search {
+  max-width: 620px;
+  margin: 1rem 0 0;
+}
+.law-search__status {
+  min-height: 1.3rem;
+  margin: .5rem 0 0;
+  font-size: .92rem;
+}
+.law-layout .panel {
+  overflow: hidden;
+}
+.law-list {
+  display: grid;
+  gap: .65rem;
+  max-height: 620px;
+  overflow-y: auto;
+  padding-right: .35rem;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--primary) 55%, transparent) transparent;
+}
+.law-list::-webkit-scrollbar { width: 8px; }
+.law-list::-webkit-scrollbar-track { background: transparent; }
+.law-list::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--primary) 55%, transparent);
+}
+.law-item {
+  display: grid;
+  grid-template-columns: minmax(76px, .2fr) minmax(0, 1fr) minmax(118px, auto);
+  gap: .75rem;
+  align-items: center;
+  padding: .8rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-soft);
+}
+.law-item strong {
+  color: var(--primary-2);
+  font-size: 1.02rem;
+}
+.law-item span {
+  min-width: 0;
+  color: var(--muted);
+  line-height: 1.35;
+}
+.law-item em {
+  justify-self: end;
+  padding: .24rem .56rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
+  border-radius: 999px;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  font-size: .82rem;
+  font-style: normal;
+  font-weight: 900;
+  white-space: nowrap;
+}
+.law-item.is-hidden { display: none; }
+
 .link-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .link-card {
   display: grid;
@@ -919,6 +979,9 @@ textarea, .json-editor { min-height: 390px; resize: vertical; line-height: 1.55;
   .activity-card--v3 { grid-template-columns: 1fr; }
   .activity-card__num { width: 100%; height: 36px; }
   .activity-card--v3 .counter { grid-column: auto; max-width: none; }
+  .law-list { max-height: 520px; }
+  .law-item { grid-template-columns: 1fr; gap: .35rem; }
+  .law-item em { justify-self: start; white-space: normal; }
   .member-grid--v3 { grid-template-columns: 1fr; }
   .member-card--v3 { grid-template-columns: 1fr; }
   .member-card__avatar { width: 100%; height: 42px; }

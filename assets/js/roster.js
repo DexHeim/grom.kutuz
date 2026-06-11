@@ -238,9 +238,9 @@
 
   function guessStatus(member, rawText, currentGroup = '') {
     const text = normalize([rawText, member.name, member.position, member.rank, member.note, currentGroup].join(' '));
-    if (/вакант|свободн/.test(text)) return 'vacant';
     if (/отпуск/.test(text)) return 'leave';
     if (/кадров|резерв/.test(text)) return 'reserve';
+    if (/вакант|свободн/.test(text)) return 'vacant';
     if (/стаж[её]р/.test(text)) return 'trainee';
     if (/актив|действующ/.test(text)) return 'active';
     return 'active';
@@ -259,6 +259,7 @@
     const nonEmpty = cells.filter(Boolean);
     if (!nonEmpty.length) return true;
     const text = nonEmpty.join(' ');
+    if (/вакант|свободн/i.test(text)) return false;
     if (/^\d+$/.test(text)) return true;
     if (/примечание/i.test(text) && nonEmpty.length <= 2) return true;
     if (groupFromHeader(text) && nonEmpty.length <= 2) return true;
@@ -328,7 +329,14 @@
     };
 
     member.status = guessStatus(member, rawText, currentGroup);
-    if (member.status === 'vacant') member.name = 'Вакантно';
+    if (member.status === 'reserve' && vacant && !rawName) {
+      member.name = 'Кадровый резерв';
+      member.rank = rawRank && !/вакант/i.test(rawRank) ? rawRank : '';
+      member.position = 'Свободный слот кадрового резерва';
+      member.note = rawNote || 'Место доступно для перевода в резерв';
+    } else if (member.status === 'vacant') {
+      member.name = 'Вакантно';
+    }
     member.groupTitle = groupFromMember(member, currentGroup);
     return member;
   }
