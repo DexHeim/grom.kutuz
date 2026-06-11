@@ -379,6 +379,17 @@ h3 {
 }
 .warning-box { border: 1px solid color-mix(in srgb, var(--warning) 50%, var(--line)); background: color-mix(in srgb, var(--warning) 12%, transparent); }
 .info-box { border: 1px solid color-mix(in srgb, var(--primary) 45%, var(--line)); background: color-mix(in srgb, var(--primary) 10%, transparent); }
+.code-block {
+  overflow: auto;
+  margin: 1rem 0 0;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  background: var(--surface-soft);
+  font: 850 .95rem/1.6 ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  white-space: pre-wrap;
+}
 .hierarchy-list { display: grid; gap: 0.65rem; }
 .hierarchy-list div, .requirement-chip {
   display: grid;
