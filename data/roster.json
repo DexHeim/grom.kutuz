@@ -1,24 +1,32 @@
 {
-  "updated": "2026-06-09",
+  "updated": "2026-07-04",
   "groups": [
     {
       "title": "Командование",
       "members": [
         {
-          "name": "Демон 92-й",
-          "rank": "Командир ОСН \"Гром\"",
-          "position": "Командир ОСН",
-          "callsign": "Демон 92-й",
-          "status": "active",
-          "note": "Руководство подразделением"
+          "name": "Смирнов Мирослав Андреевич",
+          "rank": "Подполковник",
+          "position": "Командир ОСН \"Гром\"",
+          "callsign": "Кириешка 56-й",
+          "serviceId": "345-856",
+          "status": "active"
         },
         {
-          "name": "[ФИО заместителя]",
-          "rank": "[звание]",
-          "position": "Заместитель командира ОСН",
-          "callsign": "[позывной]",
-          "status": "active",
-          "note": "Заменить на актуальные данные"
+          "name": "Хайм Александр Алексеевич",
+          "rank": "Майор",
+          "position": "Зам. Ком. ОСН \"Гром\"",
+          "callsign": "Север 21-й",
+          "serviceId": "211-021",
+          "status": "active"
+        },
+        {
+          "name": "Таггер Георгий",
+          "rank": "Майор",
+          "position": "Зам. Ком. ОСН \"Гром\"",
+          "callsign": "Жорик 68-й",
+          "serviceId": "374-868",
+          "status": "active"
         }
       ]
     },
@@ -26,20 +34,28 @@
       "title": "Инструкторский состав",
       "members": [
         {
-          "name": "[ФИО]",
-          "rank": "[звание]",
-          "position": "Старший инструктор ОСН",
-          "callsign": "[позывной]",
-          "status": "active",
-          "note": "Ответственный за подготовку и стажировку состава"
+          "name": "Владимир Бошкатов",
+          "rank": "Капитан",
+          "position": "Инструктор",
+          "callsign": "Мирослав 72-й",
+          "serviceId": "843-772",
+          "status": "active"
         },
         {
-          "name": "[ФИО]",
-          "rank": "[звание]",
-          "position": "Инструктор ОСН",
-          "callsign": "[позывной]",
-          "status": "active",
-          "note": "Экзамены, практика, квалификация"
+          "name": "Бонд Родион Валерьевич",
+          "rank": "Лейтенант",
+          "position": "Инструктор",
+          "callsign": "Альфа 45-й",
+          "serviceId": "260-345",
+          "status": "active"
+        },
+        {
+          "name": "Дмитрий Кузьмин",
+          "rank": "Сержант",
+          "position": "Инструктор",
+          "callsign": "Кузен 46-й",
+          "serviceId": "288-646",
+          "status": "active"
         }
       ]
     },
@@ -47,12 +63,77 @@
       "title": "Оперативный состав",
       "members": [
         {
-          "name": "[ФИО]",
-          "rank": "[звание]",
+          "name": "Гавертин Михаил",
+          "rank": "Прапорщик",
           "position": "Оперативник",
-          "callsign": "[позывной]",
-          "status": "active",
-          "note": "Исполнение задач ОСН"
+          "callsign": "Шмель 92-й",
+          "serviceId": "144-792",
+          "status": "leave",
+          "note": "на КМБ по 06.07"
+        },
+        {
+          "name": "Савелий Ростов",
+          "rank": "Ст. Сержант",
+          "position": "Оперативник",
+          "callsign": "Кот 16-й",
+          "serviceId": "512-916",
+          "status": "active"
+        },
+        {
+          "name": "Артем Бубнов",
+          "rank": "Ст. Сержант",
+          "position": "Оперативник",
+          "callsign": "Призрак 28-й",
+          "serviceId": "791-628",
+          "status": "active"
+        },
+        {
+          "name": "Илья Ростов",
+          "rank": "Сержант",
+          "position": "Оперативник",
+          "callsign": "Вагнер 47-й",
+          "serviceId": "568-747",
+          "status": "active"
+        },
+        {
+          "name": "Липач Владислав",
+          "rank": "Сержант",
+          "position": "Оперативник",
+          "callsign": "Липа 40-й",
+          "serviceId": "974-740",
+          "status": "active"
+        },
+        {
+          "name": "Ермолин Никита Николаевич",
+          "rank": "Сержант",
+          "position": "Оперативник",
+          "callsign": "Беркут 58-й",
+          "serviceId": "961-158",
+          "status": "active"
+        },
+        {
+          "name": "Добрыня Ростов",
+          "rank": "Сержант",
+          "position": "Оперативник",
+          "callsign": "Грех 07-й",
+          "serviceId": "720-207",
+          "status": "active"
+        },
+        {
+          "name": "Михаил Кенжи",
+          "rank": "Сержант",
+          "position": "Оперативник",
+          "callsign": "Цыпа 86-ой",
+          "serviceId": "572-186",
+          "status": "active"
+        },
+        {
+          "name": "Ростов Герман Борисович",
+          "rank": "Сержант",
+          "position": "Оперативник",
+          "callsign": "Каспер 40-й",
+          "serviceId": "269-840",
+          "status": "active"
         }
       ]
     },
@@ -60,12 +141,68 @@
       "title": "Стажёрский состав",
       "members": [
         {
-          "name": "[ФИО]",
-          "rank": "[звание]",
-          "position": "Стажёр ОСН",
-          "callsign": "[позывной]",
-          "status": "trainee",
-          "note": "Изучает FAQ, карту и сдаёт квалификацию"
+          "name": "Альтушкин Кирилл",
+          "rank": "Прапорщик",
+          "position": "Стажёр",
+          "callsign": "Босс 49-й",
+          "serviceId": "377-449",
+          "status": "reserve"
+        },
+        {
+          "name": "Леон Валентайн",
+          "rank": "Сержант",
+          "position": "Стажёр",
+          "callsign": "Моцарт 41-й",
+          "serviceId": "571-041",
+          "status": "reserve"
+        },
+        {
+          "name": "Матвей Порошочкин",
+          "rank": "Сержант",
+          "position": "Стажёр",
+          "callsign": "Индус 77-й",
+          "serviceId": "824-277",
+          "status": "reserve"
+        },
+        {
+          "name": "Луковников Анатолий Александрович",
+          "rank": "Сержант",
+          "position": "Стажёр",
+          "callsign": "Змей-97",
+          "serviceId": "133-997",
+          "status": "reserve"
+        },
+        {
+          "name": "Рыкин Александр",
+          "rank": "Сержант",
+          "position": "Стажёр",
+          "callsign": "Малыш 25-й",
+          "serviceId": "418-625",
+          "status": "reserve"
+        },
+        {
+          "name": "Алексей Калашников",
+          "rank": "Сержант",
+          "position": "Стажёр",
+          "callsign": "Гиви 90-й",
+          "serviceId": "179-090",
+          "status": "reserve"
+        },
+        {
+          "name": "Анатолий Сердюков",
+          "rank": "Сержант",
+          "position": "Стажёр",
+          "callsign": "Серый 11-й",
+          "serviceId": "662-411",
+          "status": "reserve"
+        },
+        {
+          "name": "Владислав Ростов",
+          "rank": "Сержант",
+          "position": "Стажёр",
+          "callsign": "Красавчик 62-й",
+          "serviceId": "467- 562",
+          "status": "reserve"
         }
       ]
     },
