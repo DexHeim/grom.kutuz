@@ -267,6 +267,7 @@
     if (/^\d+$/.test(text)) return true;
     if (/примечание/i.test(text) && nonEmpty.length <= 2) return true;
     if (groupFromHeader(text) && nonEmpty.length <= 2) return true;
+    if (groupFromHeader(cells[0]) && cells.slice(1, 10).every((cell) => !cell)) return true;
     return false;
   }
 
