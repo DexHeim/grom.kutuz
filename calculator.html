@@ -128,7 +128,7 @@
       <div class="section__head reveal">
         <p class="eyebrow">Склад</p>
         <h2 id="warehouse-title">Калькулятор запроса склада</h2>
-        <p>Выбери звание, введи позывной и ID — лимиты подтянутся автоматически. Склад брать разрешено раз в 6 часов.</p>
+        <p>Выбери звание, введи позывной и ID — лимиты подтянутся автоматически. Склад брать разрешено раз в 4 часа.</p>
       </div>
 
       <div class="report-grid warehouse-grid">
@@ -159,8 +159,15 @@
               <input id="warehouseWeapons" data-warehouse-count="weapons" type="number" min="0" step="1">
             </label>
             <label class="field">
-              <span class="mini-label">материалы</span>
-              <input id="warehouseMaterials" data-warehouse-count="materials" type="number" min="0" step="1">
+              <span class="mini-label">патроны</span>
+              <input id="warehouseAmmo" data-warehouse-count="ammo" type="number" min="0" step="1">
+            </label>
+            <label class="field">
+              <span class="mini-label">тип бронежилетов</span>
+              <select id="warehouseArmorType">
+                <option value="medium">Средние</option>
+                <option value="heavy">Тяжёлые</option>
+              </select>
             </label>
             <label class="field">
               <span class="mini-label">бронежилеты</span>
@@ -178,6 +185,14 @@
               <span class="mini-label">обезболивающее</span>
               <input id="warehousePainkillers" data-warehouse-count="painkillers" type="number" min="0" step="1">
             </label>
+            <label class="field">
+              <span class="mini-label">бодикамеры</span>
+              <input id="warehouseBodycams" data-warehouse-count="bodycams" type="number" min="0" step="1">
+            </label>
+            <label class="field field--full">
+              <span class="mini-label">материалы</span>
+              <input id="warehouseMaterials" data-warehouse-count="materials" type="number" min="0" step="1">
+            </label>
           </div>
 
           <div class="warehouse-actions">
@@ -192,7 +207,7 @@
           <h3>Лимит по званию</h3>
           <div class="warehouse-tier" id="warehouseTier">Выбери звание</div>
           <div class="warehouse-limit-list" id="warehouseLimitList"></div>
-          <div class="info-box">Оружие выбирается из разрешённого списка. Запрос отправляй в <a href="https://discord.com/channels/1465392165453828138/1465600295424884889" target="_blank" rel="noopener noreferrer">канал склада</a>.</div>
+          <div class="info-box">Оружие выбирается из разрешённого списка. САР М249 — со звания ст. сержант полиции. Комплект можно брать с превышением лимита, но не более чем в 2 раза. Запрос отправляй в <a href="https://discord.com/channels/1465392165453828138/1465600295424884889" target="_blank" rel="noopener noreferrer">канал склада</a>.</div>
           <h3>Разрешённое оружие</h3>
           <div class="warehouse-weapons" id="warehouseWeaponList"></div>
         </aside>
@@ -206,7 +221,7 @@
   </footer>
 
   <script src="assets/js/common.js" defer></script>
-  <script src="assets/js/site-data.js" defer></script>
-  <script src="assets/js/calculator.js?v=20260611-2" defer></script>
+  <script src="assets/js/site-data.js?v=20260704-1" defer></script>
+  <script src="assets/js/calculator.js?v=20260704-2" defer></script>
 </body>
 </html>

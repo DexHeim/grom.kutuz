@@ -4,45 +4,45 @@
   const activities = window.GROM_ACTIVITIES || [];
   const promotionSteps = window.GROM_PROMOTION_STEPS || [];
   const storageKey = 'osn-grom-calculator-v4';
-  const warehouseStorageKey = 'osn-grom-warehouse-calculator-v1';
+  const warehouseStorageKey = 'osn-grom-warehouse-calculator-v2';
   const promotionReportChannelUrl = 'https://discord.com/channels/1465392165453828138/1465600194199552064';
   const warehouseChannelUrl = 'https://discord.com/channels/1465392165453828138/1465600295424884889';
 
   const warehouseTiers = [
     {
       id: 'sergeant',
-      title: '@||| Сержант полиции - @❚ Старшина полиции',
-      ranks: ['Сержант полиции', 'Ст. сержант полиции', 'Старшина полиции'],
-      limits: { weapons: 1, materials: 500, armor: 2, medkits: 5, defibs: 2, painkillers: 3 },
-      weapons: ['Таурус "Бешеный бык"', 'Сайга-12К', 'АК-12', 'Штейр АУГ-А3']
+      title: '@||| Сержант полиции',
+      ranks: ['Сержант полиции'],
+      limits: { weapons: 2, ammo: 360, materials: 1000, armorMedium: 10, armorHeavy: 5, medkits: 10, defibs: 3, painkillers: 8, bodycams: 15 },
+      weapons: ['Кольт М16', 'Штейр АУГ-А3', 'FN-Scar']
     },
     {
-      id: 'warrant',
-      title: '@☆☆ Прапорщик полиции - @✮ Младший лейтенант полиции',
-      ranks: ['Прапорщик полиции', 'Ст. прапорщик полиции', 'Младший лейтенант полиции'],
-      limits: { weapons: 2, materials: 1000, armor: 5, medkits: 5, defibs: 3, painkillers: 5 },
-      weapons: ['Таурус "Бешеный бык"', 'Сайга-12К', 'АК-12', 'Штейр АУГ-А3', 'Кольт М16', 'Кольт 416 "Канада"']
+      id: 'senior-sergeant',
+      title: 'Ст. сержант полиции - @☆☆ Прапорщик полиции',
+      ranks: ['Ст. сержант полиции', 'Старшина полиции', 'Прапорщик полиции'],
+      limits: { weapons: 2, ammo: 360, materials: 1000, armorMedium: 10, armorHeavy: 5, medkits: 10, defibs: 3, painkillers: 8, bodycams: 15 },
+      weapons: ['Кольт М16', 'Штейр АУГ-А3', 'FN-Scar', 'САР М249']
     },
     {
-      id: 'lieutenant',
-      title: '@✮✮ Лейтенант полиции - @✮✮✮✮ Капитан полиции',
-      ranks: ['Лейтенант полиции', 'Ст. лейтенант полиции', 'Капитан полиции'],
-      limits: { weapons: 3, materials: 1000, armor: 10, medkits: 10, defibs: 3, painkillers: 8 },
-      weapons: ['Таурус "Бешеный бык"', 'Сайга-12К', 'АК-12', 'Штейр АУГ-А3', 'Кольт М16', 'Кольт 416 "Канада"', 'САР М249']
+      id: 'senior-warrant',
+      title: 'Ст. прапорщик полиции - @✮✮ Лейтенант полиции',
+      ranks: ['Ст. прапорщик полиции', 'Младший лейтенант полиции', 'Лейтенант полиции'],
+      limits: { weapons: 2, ammo: 360, materials: 1000, armorMedium: 10, armorHeavy: 10, medkits: 15, defibs: 4, painkillers: 10, bodycams: 15 },
+      weapons: ['Кольт М16', 'Штейр АУГ-А3', 'FN-Scar', 'Кольт 416 "Канада"', 'САР М249']
+    },
+    {
+      id: 'senior-lieutenant',
+      title: 'Ст. лейтенант полиции - @✮✮✮✮ Капитан полиции',
+      ranks: ['Ст. лейтенант полиции', 'Капитан полиции'],
+      limits: { weapons: 3, ammo: 360, materials: 1000, armorMedium: 15, armorHeavy: 15, medkits: 15, defibs: 5, painkillers: 15, bodycams: 15 },
+      weapons: ['Любое оружие со склада']
     },
     {
       id: 'major',
-      title: '@★ Майор полиции - @★★ Подполковник полиции',
-      ranks: ['Майор полиции', 'Подполковник полиции'],
-      limits: { weapons: 3, materials: 2000, armor: 15, medkits: 15, defibs: 5, painkillers: 10 },
-      weapons: ['Таурус "Бешеный бык"', 'Сайга-12К', 'АК-12', 'Штейр АУГ-А3', 'Кольт М16', 'Кольт 416 "Канада"', 'САР М249', 'FN-Scar']
-    },
-    {
-      id: 'colonel',
-      title: '@★★★ Полковник полиции - @⭐ Генерал-майор полиции',
-      ranks: ['Полковник полиции', 'Генерал-майор полиции'],
-      limits: { weapons: 3, materials: 2000, armor: 20, medkits: 25, defibs: 15, painkillers: 15, otherMedical: 15 },
-      weapons: ['3 единицы оружия по разрешению руководства']
+      title: '@★ Майор полиции - @⭐ Генерал-майор полиции',
+      ranks: ['Майор полиции', 'Подполковник полиции', 'Полковник полиции', 'Генерал-майор полиции'],
+      limits: { weapons: 3, ammo: 360, materials: 2000, armorMedium: 20, armorHeavy: 20, medkits: 25, defibs: 15, painkillers: 15, otherMedical: 15, bodycams: 15 },
+      weapons: ['Любое оружие со склада (общий лимит 4.20 ПП)']
     }
   ];
 
@@ -50,11 +50,12 @@
   const $$ = (selector, parent = document) => Array.from(parent.querySelectorAll(selector));
 
   const categoryMap = {
-    gmp: 'ГМП', reports: 'Инструктор', exams: 'Инструктор', supply: 'Поставка',
-    raid_participation: 'Налёты', raid_success: 'Налёты', robbery_success: 'Ограбления',
-    flat_robbery: 'Ограбления', kraz_participation: 'КРАЗ', kraz_success: 'КРАЗ',
-    ik7: 'ИК-7', patrol: 'Патруль', training: 'Тренировка', reinforced_patrol: 'Патруль',
-    duty_unit: 'ДП', duty_unit_base: 'ДП', arrest: 'Арест', fine: 'Штраф'
+    gmp: 'ГМП', reports: 'Инструктор', exams: 'Инструктор', weekly_report_check: 'Инструктор',
+    uvd_tour: 'Инструктор', internship: 'Инструктор', squad_check: 'Инструктор',
+    supply: 'Поставка', raid_participation: 'Налёты', raid_success: 'Налёты',
+    flat_robbery: 'Ограбления', kraz_participation: 'КРАЗ', kraz_delivery: 'КРАЗ',
+    federal_prison: 'Фед. тюрьма', training: 'Тренировка', reinforced_patrol: 'Патруль',
+    duty_unit: 'ДП', arrest: 'Задержание', fine: 'Штраф'
   };
 
   const $id = (id) => document.getElementById(id);
@@ -407,7 +408,7 @@
     }
 
     function fillExample() {
-      state.values = { supply: 2, patrol: 1, gmp: 1, training: 2, arrest: 1, fine: 2 };
+      state.values = { supply: 2, reinforced_patrol: 1, gmp: 1, training: 2, arrest: 1, fine: 2 };
       saveValues(state.values);
       renderActivities();
       updateAll();
@@ -446,11 +447,14 @@
       callsign: $id('warehouseCallsign'),
       serviceId: $id('warehouseServiceId'),
       weapons: $id('warehouseWeapons'),
+      ammo: $id('warehouseAmmo'),
       materials: $id('warehouseMaterials'),
+      armorType: $id('warehouseArmorType'),
       armor: $id('warehouseArmor'),
       medkits: $id('warehouseMedkits'),
       defibs: $id('warehouseDefibs'),
       painkillers: $id('warehousePainkillers'),
+      bodycams: $id('warehouseBodycams'),
       tier: $id('warehouseTier'),
       limits: $id('warehouseLimitList'),
       weaponList: $id('warehouseWeaponList'),
@@ -460,7 +464,7 @@
       status: $id('warehouseCopyStatus')
     };
 
-    const countKeys = ['weapons', 'materials', 'armor', 'medkits', 'defibs', 'painkillers'];
+    const countKeys = ['weapons', 'ammo', 'materials', 'armor', 'medkits', 'defibs', 'painkillers', 'bodycams'];
     const state = loadWarehouseState();
 
     function loadWarehouseState() {
@@ -507,11 +511,24 @@
       return digits.length >= 2 ? digits.slice(-2) : 'NN';
     }
 
+    function getArmorType() {
+      return elements.armorType.value === 'heavy' ? 'heavy' : 'medium';
+    }
+
+    function getArmorTypeLabel() {
+      return getArmorType() === 'heavy' ? 'тяжёлые' : 'средние';
+    }
+
+    function getLimit(tier, key) {
+      if (key === 'armor') return getArmorType() === 'heavy' ? tier.limits.armorHeavy : tier.limits.armorMedium;
+      return tier.limits[key] ?? 0;
+    }
+
     function getCounts() {
       const tier = getSelectedTier();
       const counts = {};
       countKeys.forEach((key) => {
-        counts[key] = sanitizeWarehouseCount(elements[key].value, tier.limits[key] ?? 0);
+        counts[key] = sanitizeWarehouseCount(elements[key].value, getLimit(tier, key));
       });
 
       if (tier.limits.otherMedical && counts.defibs + counts.painkillers > tier.limits.otherMedical) {
@@ -522,15 +539,16 @@
     }
 
     function writeCounts(counts) {
+      const tier = getSelectedTier();
       countKeys.forEach((key) => {
-        elements[key].max = getSelectedTier().limits[key] ?? 0;
+        elements[key].max = getLimit(tier, key);
         elements[key].value = counts[key] || '';
       });
     }
 
     function fillMaximums() {
       const tier = getSelectedTier();
-      const counts = { ...tier.limits };
+      const counts = { ...tier.limits, armor: getLimit(tier, 'armor') };
       if (tier.limits.otherMedical) {
         counts.defibs = 5;
         counts.painkillers = Math.max(0, tier.limits.otherMedical - counts.defibs);
@@ -539,14 +557,19 @@
     }
 
     function renderLimits(tier) {
+      const armorText = tier.limits.armorMedium === tier.limits.armorHeavy
+        ? `${tier.limits.armorMedium} средних или тяжёлых`
+        : `${tier.limits.armorMedium} средних / ${tier.limits.armorHeavy} тяжёлых`;
       const limitRows = [
-        ['Оружие и боеприпасы', `${tier.limits.weapons} ед.`],
+        ['Оружие', `${tier.limits.weapons} ед.`],
+        ['Патроны', `${tier.limits.ammo} ед.`],
         ['Материалы', `${numberFormat(tier.limits.materials)} ед.`],
-        ['Бронежилеты', `${tier.limits.armor} ед.`],
+        ['Бронежилеты', armorText],
         ['Аптечки', `${tier.limits.medkits} ед.`],
         tier.limits.otherMedical
           ? ['Дефибриллятор + обезболивающее', `${tier.limits.otherMedical} предметов суммарно`]
-          : ['Дефибрилляторы / обезболивающее', `${tier.limits.defibs} / ${tier.limits.painkillers} ед.`]
+          : ['Дефибрилляторы / обезболивающее', `${tier.limits.defibs} / ${tier.limits.painkillers} ед.`],
+        ['Бодикамеры', `${tier.limits.bodycams} ед.`]
       ];
 
       elements.tier.textContent = tier.title;
@@ -580,13 +603,15 @@
         `Жетон: /do На бронежилете висит нагрудный знак : «УВД | ОСН ГРОМ | ${callsign} | ${badgeNumber}-й».`,
         '',
         `Лимит: ${tier.title}`,
-        `Оружие и боеприпасы: ${counts.weapons} ед. из списка: ${tier.weapons.join(', ')}`,
+        `Оружие: ${counts.weapons} ед. из списка: ${tier.weapons.join(', ')}`,
+        `Патроны: ${counts.ammo} ед.`,
         `Материалы: ${counts.materials} ед.`,
-        `Экипировка (бронежилеты): ${counts.armor} ед.`,
+        `Экипировка (бронежилеты): ${counts.armor} ед. (${getArmorTypeLabel()})`,
         `Медикаменты (аптечки): ${counts.medkits} ед.`,
         medicalLine,
+        `Бодикамеры: ${counts.bodycams} ед.`,
         '',
-        'Склад беру не чаще 1 раза в 6 часов.'
+        'Склад беру не чаще 1 раза в 4 часа.'
       ].join('\n');
     }
 
@@ -599,6 +624,7 @@
       state.rank = elements.rank.value;
       state.callsign = elements.callsign.value;
       state.serviceId = elements.serviceId.value;
+      state.armorType = getArmorType();
       state.counts = counts;
       saveWarehouseState();
 
@@ -610,8 +636,9 @@
       elements.rank.value = state.rank && findTierByRank(state.rank) ? state.rank : warehouseTiers[0].ranks[0];
       elements.callsign.value = state.callsign || '';
       elements.serviceId.value = state.serviceId || '';
+      elements.armorType.value = state.armorType === 'heavy' ? 'heavy' : 'medium';
       const tier = getSelectedTier();
-      const counts = state.counts || tier.limits;
+      const counts = state.counts || { ...tier.limits, armor: getLimit(tier, 'armor') };
       writeCounts(counts);
     }
 
@@ -644,6 +671,7 @@
       fillMaximums();
       updateWarehouse();
     });
+    elements.armorType.addEventListener('change', updateWarehouse);
     [elements.callsign, elements.serviceId, ...countKeys.map((key) => elements[key])].forEach((element) => {
       element.addEventListener('input', updateWarehouse);
       element.addEventListener('blur', updateWarehouse);
