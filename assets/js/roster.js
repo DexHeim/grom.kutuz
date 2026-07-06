@@ -49,6 +49,37 @@
     return STATUS_LABELS[status] || status || STATUS_LABELS.active;
   }
 
+  const URL_PATTERN = /https?:\/\/\S+/gi;
+
+  function extractProfileLink(member) {
+    const fields = ['name', 'rank', 'position', 'callsign', 'serviceId', 'badge', 'note'];
+    let profileUrl = clean(member.profileUrl);
+
+    fields.forEach((field) => {
+      const value = String(member[field] ?? '');
+      if (!value) return;
+      const stripped = value.replace(URL_PATTERN, (url) => {
+        if (!profileUrl) profileUrl = url.replace(/[).,;>»]+$/, '');
+        return ' ';
+      });
+      member[field] = stripped
+        .split('·')
+        .map((part) => clean(part))
+        .filter(Boolean)
+        .join(' · ');
+    });
+
+    if (profileUrl) member.profileUrl = profileUrl;
+    return member;
+  }
+
+  function sanitizeRosterData(data) {
+    (data.groups || []).forEach((group) => {
+      (group.members || []).forEach(extractProfileLink);
+    });
+    return data;
+  }
+
   function statusClass(status) {
     const classes = ['status-badge'];
     if (status && status !== 'active') classes.push(`status-badge--${status}`);
@@ -144,6 +175,7 @@
           </div>
           <div class="member-card__chips">
             ${chips.map((chip) => `<span>${escapeHtml(chip)}</span>`).join('')}
+            ${member.profileUrl ? `<a class="member-card__file" href="${escapeHtml(member.profileUrl)}" target="_blank" rel="noopener noreferrer">Личное дело ↗</a>` : ''}
           </div>
           ${member.note ? `<small>${escapeHtml(member.note)}</small>` : ''}
         </div>
@@ -267,7 +299,8 @@
     if (/^\d+$/.test(text)) return true;
     if (/примечание/i.test(text) && nonEmpty.length <= 2) return true;
     if (groupFromHeader(text) && nonEmpty.length <= 2) return true;
-    if (groupFromHeader(cells[0]) && cells.slice(1, 10).every((cell) => !cell)) return true;
+    if (cells.slice(0, 9).every((cell) => !cell)) return true;
+    if (groupFromHeader(cells[0]) && cells.slice(1, 9).every((cell) => !cell)) return true;
     return false;
   }
 
@@ -427,7 +460,7 @@
 
     let data;
     try {
-      data = await loadRoster();
+      data = sanitizeRosterData(await loadRoster());
     } catch (error) {
       root.innerHTML = '<div class="empty-state">Не удалось загрузить состав из Google Sheets и резервного JSON. Проверьте доступ к таблице или файл <code>data/roster.json</code>.</div>';
       return;
